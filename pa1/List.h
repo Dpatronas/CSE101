@@ -45,7 +45,7 @@ void FreeList(List* pL);
 int length(List L);
 
 // Returns index of cursor element if defined, -1 otherwise.
-int index(List L);
+int index1(List L);
 
 // Returns front element of L
 // Pre: length()>0
