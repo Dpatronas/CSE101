@@ -1,0 +1,25 @@
+README
+
+	List.h
+		public file including the definitions of structures and the prototypes
+	
+	List.c
+		implementation of list.h AKA the linked list ADT
+	
+	ListClient.c
+		tests linked list functionality
+
+	Lex.c
+		IO operations
+		Creates a string array populated by the lines of:
+		infile input strings as its elements
+		creates an empty list which is populated lexicographically by:
+		using the functions within List.h
+
+	Makefile
+		make clean  	 : removes all generated files
+		make checkClient : generates valgrind report for ListClient.c
+		make checkLex	 : generates valgrind report for Lex.c
+
+		Example:
+		$./Lex.c input.txt output.txt
