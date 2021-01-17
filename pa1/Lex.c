@@ -80,22 +80,14 @@ int main(int argc, char * argv[]){
     i++;
   }
 
-  for (int j = 0; j < line_count; j++) {
-    printf("\nelement %d = %d",j,*tok_arr[j]);
-  }
-        printf("\n\n");
-
-// //make the empty list
+  //make the empty list
   List lex = newList();
   append(lex, *tok_arr[0]);
   
   // //step through indices of array
-  
   for (int i = 1; i < line_count; i++) {
     int curr_len = length(lex);
     moveFront(lex);
-
-    printf("\n\n(%d) starting loop cursor = %d",i, get(lex));
 
     //inner loop to iterate through linked list
     for (int j = 0; j < curr_len; j++) {
@@ -103,44 +95,36 @@ int main(int argc, char * argv[]){
       if ( strcmp( tok_arr[i], tok_arr[index(lex)] ) < 0)  {
         
         if ( get(lex) >= *tok_arr[index(lex)]) {
-          printf("\n\n\tData Prepending   (%d) <- indx data: %d", *tok_arr[i], *tok_arr[index(lex)]);
-          printf("\n\tActual Prepending (%d) <-    cursor: %d\n", *tok_arr[i], get(lex));
-
-          // if ( get(lex) > *tok_arr[index1(lex)] ) {
-
             insertBefore(lex, *tok_arr[i]);
             //if prepend occurs, exit the inner loop
             j = curr_len + 1;
-
-            printf("\t\t"); printList(stdout, lex);
-          // }
-          continue;
         }
       }
 
       else {
         //step to next element in cursor
-        printf("\n\n\tMoving next: ");
-
         moveNext(lex);
-
-        printf("index = %d\n\t\t\t     cursor = %d\n", index(lex), get(lex));
-        printf("\t\t"); printList(stdout, lex);
 
         //if cursor becomes undefined then we are at back of list.. append
         if ( get(lex) == -1 ) {
-          printf("\n\n\tAppending %d -> %d\n", *tok_arr[i], *tok_arr[index(lex)]);
-
           append(lex, *tok_arr[i]);
-
-          printf("\t\t"); printList(stdout, lex);
           continue;
         }
       }
     }
   }
-
+  //print the final list
   printList(out, lex);
+
+  //cleanup
+  for (int j = 0; j < line_count; j++) {
+    free(tok_arr[j]);
+    tok_arr[j]=NULL;
+  }
+  
+  *tok_arr = NULL;
+  clear(lex);
+  lex = NULL;
 
   fclose(in);
   fclose(out);
