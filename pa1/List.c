@@ -1,7 +1,7 @@
 /*********************************************************************************
 * Despina Patronas, Dpatrona
 * 2021 Winter CSE 101 pa1
-* List.h
+* List.c
 * Define the functions of a Doubly Linked List
   Cursor used for bi-directional iteration of list
   Cursor is undefined as default state
