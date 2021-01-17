@@ -1,8 +1,13 @@
 /*********************************************************************************
 * Despina Patronas, Dpatrona
 * 2021 Winter CSE 101 pa1
-* ListClient.c
-* Test client for List ADT
+* Lex.c
+    IO operations
+    Creates a string array populated by the lines of:
+    infile input strings as its elements
+    creates an empty list which is populated lexicographically by:
+    using the functions within List.h
+    outfile output as sorted strings
 *********************************************************************************/
 
 #include<stdio.h>
@@ -114,12 +119,18 @@ int main(int argc, char * argv[]){
     }
   }
 
-  //print the final list
-  front(lex);
+ //print the final list
+  moveFront(lex);
+  
+  while( get(lex) != -1) {
 
-  for (int i = 0; i < length(lex); i++) {
-    fprintf(out, "%s ", tok_arr[index(lex)]);
-    moveNext(lex);
+    for (int j = 0; j < line_count; j++) {
+      //if data matches
+      if (*tok_arr[j] == get(lex)) {
+        fprintf(out, "%s ", tok_arr[j]);
+        moveNext(lex);
+      }
+    }
   }
 
   //cleanup
@@ -127,9 +138,11 @@ int main(int argc, char * argv[]){
     free(tok_arr[j]);
     tok_arr[j]=NULL;
   }
-  
+
   *tok_arr = NULL;
   clear(lex);
+  freeList(&lex);
+
   lex = NULL;
 
   fclose(in);
