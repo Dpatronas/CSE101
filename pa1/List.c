@@ -12,7 +12,7 @@
 #include "List.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string.h> //for memset
 
 // CONSTRUCTOR / DESTRUCTOR=======================================================
 
@@ -196,6 +196,7 @@ void moveNext(List L) {
       L->index++;
       return;
     }
+    //cursor = back becomes undefined
     L->cursor = NULL;
     L->index = -1;
   }
@@ -315,6 +316,20 @@ void insertAfter(List L, int x) {
 // Delete the front element. Pre: length()>0
 void deleteFront(List L) {
   if (L->front) {
+
+    //what if there is a cursor defined?
+    if(L->cursor) {
+      //if cursor is defined
+      if(L->cursor != L->front) {
+        L->index--;
+      }
+      //if cursor is defined at the front
+      else {
+        L->cursor = NULL;
+        L->index = -1; 
+      }
+    }
+    //Manipulations
     //Length >= 2
     if (L->length > 1) {
       L->front->next->prev = NULL;  // front <-x- node
@@ -324,11 +339,6 @@ void deleteFront(List L) {
 
       L->front = temp;              //set new front
       L->length--;
-
-      //what if there is a cursor defined? index shifts
-      if(L->cursor && L->cursor != L->front) {
-        L->index--;
-      }
 
       return;
     }
@@ -344,6 +354,15 @@ void deleteFront(List L) {
 
 // Delete the back element. Pre: length()>0
 void deleteBack(List L) {
+
+    //what if there is a cursor defined at the back?
+    if(L->cursor) {
+      //if cursor is defined
+      if(L->cursor == L->back) {
+        L->cursor = NULL;
+        L->index = -1; 
+      }
+    }
 
   if (L->back) {
     //length >= 2
