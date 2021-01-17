@@ -6,7 +6,6 @@
 	Cursor used for bi-directional iteration of list
 	Cursor is undefined as default state
 	Cursor traverses list from element 0 (front) to n-1 (back)
-	Exports a List type
 *********************************************************************************/
 
 #include <stdio.h>
@@ -39,13 +38,13 @@ typedef ListObj* List;
 List newList(void);
 
 // Frees all heap memory associated with *pL, and sets *pL to NULL.
-void FreeList(List* pL);
+void freeList(List* pL);
 
 // Returns the number of elements in L.
 int length(List L);
 
 // Returns index of cursor element if defined, -1 otherwise.
-int index1(List L);
+int index(List L);
 
 // Returns front element of L
 // Pre: length()>0

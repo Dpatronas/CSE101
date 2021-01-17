@@ -1,12 +1,11 @@
 /*********************************************************************************
 * Despina Patronas, Dpatrona
 * 2021 Winter CSE 101 pa1
-* List.h
+* List.c
 * Define the functions of a Doubly Linked List
 	Cursor used for bi-directional iteration of list
 	Cursor is undefined as default state
 	Cursor traverses list from element 0 (front) to n-1 (back)
-	Exports a List type
 *********************************************************************************/
 
 #include "List.h"
