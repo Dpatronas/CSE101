@@ -113,8 +113,14 @@ int main(int argc, char * argv[]){
       }
     }
   }
+
   //print the final list
-  printList(out, lex);
+  front(lex);
+
+  for (int i = 0; i < length(lex); i++) {
+    fprintf(out, "%s ", tok_arr[index(lex)]);
+    moveNext(lex);
+  }
 
   //cleanup
   for (int j = 0; j < line_count; j++) {
