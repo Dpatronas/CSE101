@@ -15,11 +15,14 @@ README
 		infile input strings as its elements
 		creates an empty list which is populated lexicographically by:
 		using the functions within List.h
+		outfile output as sorted strings
 
 	Makefile
+		make Lex		 : builds executable for program
 		make clean  	 : removes all generated files
-		make checkClient : generates valgrind report for ListClient.c
+		make checkClient  : generates valgrind report for ListClient.c
 		make checkLex	 : generates valgrind report for Lex.c
 
-		Example:
-		$./Lex.c input.txt output.txt
+	run example:
+
+		$./Lex input.txt output.txt
