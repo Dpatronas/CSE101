@@ -21,6 +21,7 @@ README
 		make Lex		 : builds executable for program
 		make clean  	 : removes all generated files
 		make checkClient  : generates valgrind report for ListClient.c
+		make ModelListTest:make ModelListTest
 		make checkLex	 : generates valgrind report for Lex.c
 
 	run example:
