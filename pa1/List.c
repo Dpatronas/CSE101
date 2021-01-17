@@ -1,11 +1,12 @@
 /*********************************************************************************
 * Despina Patronas, Dpatrona
 * 2021 Winter CSE 101 pa1
-* List.c
+* List.h
 * Define the functions of a Doubly Linked List
-	Cursor used for bi-directional iteration of list
-	Cursor is undefined as default state
-	Cursor traverses list from element 0 (front) to n-1 (back)
+  Cursor used for bi-directional iteration of list
+  Cursor is undefined as default state
+  Cursor traverses list from element 0 (front) to n-1 (back)
+  Exports a List type
 *********************************************************************************/
 
 #include "List.h"
@@ -17,45 +18,45 @@
 
 // Returns reference to a new NodeObj
 Node newNode (int data) {
-	Node N = (Node)malloc(sizeof(NodeObj));
-	if (!N) {		//may also do assert(N != NULL)
-		exit(1);
-	}
-	N->data = data;	//set data
-	N->next = NULL;	//set ptr to next node
-	N->prev = NULL;	//set ptr to prev node
-	return (N);
+  Node N = (Node)malloc(sizeof(NodeObj));
+  if (!N) {   //may also do assert(N != NULL)
+    exit(1);
+  }
+  N->data = data; //set data
+  N->next = NULL; //set ptr to next node
+  N->prev = NULL; //set ptr to prev node
+  return (N);
 }
 
 // Frees heap of allocated memory pointed to by pointer Node (*pN)
 // sets *pN to NULL
 void freeNode(Node *pN) {
-	if (pN && *pN) {
-		memset(*pN, 0, sizeof(NodeObj)); //sets next and prev back to null
+  if (pN && *pN) {
+    memset(*pN, 0, sizeof(NodeObj)); //sets next and prev back to null
     free(*pN);
-		*pN = NULL;
-	}
+    *pN = NULL;
+  }
 }
 
 // Creates and returns a new default empty state List.
 List newList(void) {
-	List L = (List)malloc (sizeof(ListObj));
-	if (!L) {		//may also do assert(L)
-		exit(1);
-	}
-	L->front = L->back = L->cursor = NULL;
-	L->length = 0;
-	L->index = -1;
-	return (L);
+  List L = (List)malloc (sizeof(ListObj));
+  if (!L) {   //may also do assert(L)
+    exit(1);
+  }
+  L->front = L->back = L->cursor = NULL;
+  L->length = 0;
+  L->index = -1;
+  return (L);
 }
 
 // Frees all heap memory associated with *pL, and sets *pL to NULL.
 void freeList(List* pL) {
   //make sure the pointer is a valid pointer
-	if (pL && *pL) {
-		memset(*pL, 0, sizeof(ListObj));
-	  free(*pL);
-	  *pL = NULL;
+  if (pL && *pL) {
+    memset(*pL, 0, sizeof(ListObj));
+    free(*pL);
+    *pL = NULL;
   }
 }
 
@@ -63,42 +64,40 @@ void freeList(List* pL) {
 
 // Returns the number of elements in L. 0 = empty
 int length(List L) {
-
-	return L->length;
+  return L->length;
 }
 
 // Returns int index of cursor element. may returns -1 (undefined).
 int index(List L) {
-
-	return L->index;
+  return L->index;
 }
 
 // Returns front element (data) of L
 // Pre: length()>0
 int front(List L) {
-	if ( L->length > 0 ) {
-		return L->front->data;
-	}
-  printf("Nothing to return list is empty / NDF");
+  if ( L->length > 0 ) {
+    return L->front->data;
+  }
+  printf("\nNo front to return empty list ");
   return -1;
 }
 
 // Returns back element (data) of L.
 //Pre: length()>0
 int back(List L) {
-	if ( L->length > 0 ) {
-		return L->back->data;
-	}
-  printf("Nothing to return list is empty / NDF");
+  if ( L->length > 0 ) {
+    return L->back->data;
+  }
+  printf("\nNo back to return empty list ");
   return -1;
 }
 
 // Returns cursor element (data) of L.
 //Pre: length()>0, index()>=0 otherwise cursor is undefined
 int get(List L) {
-	if ( (L->length > 0 ) && (L->index > -1) && (L->cursor) ) {
-		return L->cursor->data;
-	}
+  if ( (L->length > 0 ) && (L->index > -1) && (L->cursor) ) {
+    return L->cursor->data;
+  }
   //printf("Nothing to return list is empty / cursor NDF");
   return -1;
 }
@@ -106,23 +105,23 @@ int get(List L) {
 // Returns true (1) iff Lists A and B are in same state, otherwise returns false (0)
 int equals(List A, List B) {
 
-	//default false
-	int ret = 0;
-	Node N = NULL;
-	Node M = NULL;
-	
-	//set ret by checking length match first
-	ret = ( A->length == B->length );
-	N = A->front;
-	M = B->front;
+  //default false
+  int ret = 0;
+  Node N = NULL;
+  Node M = NULL;
+  
+  //set ret by checking length match first
+  ret = ( A->length == B->length );
+  N = A->front;
+  M = B->front;
 
-	//compares data values updating ret value for entire list
-	while ( ret && N ) {
-		ret = (N->data == M->data);
-		N = N->next;
-		M = M->next;
-	}
-	return ret;
+  //compares data values updating ret value for entire list
+  while ( ret && N ) {
+    ret = (N->data == M->data);
+    N = N->next;
+    M = M->next;
+  }
+  return ret;
 }
 
 // MANIPULATE FUNCTIONS=============================================================
@@ -147,27 +146,27 @@ void clear(List L) {
 // Overwrites the cursor element’s data with x
 // Pre: length()>0, index()>=0
 void set(List L, int x) {
-	if ( (L->index > -1) && (L->length > 0) && (L->cursor)) {
-		L->cursor->data = x;
-	}
+  if ( (L->index > -1) && (L->length > 0) && (L->cursor)) {
+    L->cursor->data = x;
+  }
 }
 
 // If L is non-empty, sets cursor to back element, otherwise do nothing
 // note change index
 void moveFront(List L) {
-	if (L->length > 0) {
-		L->cursor = L->front;
+  if (L->length > 0) {
+    L->cursor = L->front;
     L->index = 0;
-	}
+  }
 }
 
 // If L is non-empty, sets cursor to back element, otherwise do nothing
 // note change index
 void moveBack(List L) {
-	if (L->length > 0) {
-		L->cursor = L->back;
+  if (L->length > 0) {
+    L->cursor = L->back;
     L->index = L->length - 1;
-	}
+  }
 }
 
 // If cursor is defined and not at front, move cursor one
@@ -175,15 +174,15 @@ void moveBack(List L) {
 // if cursor is defined and at front, cursor becomes undefined;
 // if cursor is undefined do nothing
 void movePrev(List L) {
-	if (L->cursor) {
-		if (L->cursor != L->front) {
-			L->cursor = L->cursor->prev;
+  if (L->cursor) {
+    if (L->cursor != L->front) {
+      L->cursor = L->cursor->prev;
       L->index--;
-			return;
-		}
-		L->cursor = NULL;
+      return;
+    }
+    L->cursor = NULL;
     L->index = -1;
-	}
+  }
 }
 
 // If cursor is defined and not at back, move cursor one
@@ -191,15 +190,15 @@ void movePrev(List L) {
 // if cursor is defined and at back, cursor becomes undefined; 
 // do nothing if cursor is undefined 
 void moveNext(List L) {
-	if (L->cursor) {
-		if (L->cursor != L->back) {
-			L->cursor = L->cursor->next;
+  if (L->cursor) {
+    if (L->cursor != L->back) {
+      L->cursor = L->cursor->next;
       L->index++;
-			return;
-		}
-		L->cursor = NULL;
+      return;
+    }
+    L->cursor = NULL;
     L->index = -1;
-	}
+  }
 }
 
 // Insert new element into L. If L is non-empty,
@@ -207,18 +206,21 @@ void moveNext(List L) {
 // note: if cursor is defined, increment index
 void prepend(List L, int x) {
 
-	Node nn = newNode(x);
+  Node nn = newNode(x);
 
-	//if L is not empty
-	 if (L->length > 0) {
-	 	nn->next = L->front;	// nn -> front
-	 	L->front->prev = nn;	// nn <- front
-	 	L->front = nn;			  // nn <-> oldfront
-	 }
-	 //default case L is empty
-	 else {
+  //if L is not empty
+   if (L->length > 0) {
+
+    nn->next = L->front;  // nn -> front
+    L->front->prev = nn;  // nn <- front
+    L->front = nn;        // nn <-> oldfront
+
+   }
+   //default case L is empty
+   else {
     L->front = L->back = nn;
-	 }
+
+   }
   //both cases
   L->length++;
 
@@ -233,14 +235,14 @@ void prepend(List L, int x) {
 // note: cursor and index unaffected
 void append(List L, int x) {
 
-	Node nn = newNode(x);
+  Node nn = newNode(x);
 
-	//if list is non empty
-	if (L->length > 0 ) {
+  //if list is non empty
+  if (L->length > 0 ) {
     L->back->next = nn;    // back -> nn
     nn->prev = L->back;    // back <- nn
     L->back = nn;          // oldback <-> nn
-	}
+  }
   //default case L is empty
   else {
     L->front = L->back = nn; //default node nn is only element in list
@@ -322,15 +324,20 @@ void deleteFront(List L) {
 
       L->front = temp;              //set new front
       L->length--;
+
+      //what if there is a cursor defined? index shifts
+      if(L->cursor && L->cursor != L->front) {
+        L->index--;
+      }
+
       return;
     }
-    //length = 1
+    //only one element 
     else {
-      freeNode(&L->back);
-      freeNode(&L->front);
-      L->length--;
+      clear(L);
       return;
     }
+
   }
   printf("There is no front element to delete!");
 }
@@ -341,21 +348,18 @@ void deleteBack(List L) {
   if (L->back) {
     //length >= 2
     if (L->length > 1) {
-      L->back->prev->next= NULL;    // node -x-> back
-      Node temp = L->back->prev;    // save new back
+      L->back->prev->next= NULL;    // -node -x-> back
+      Node temp = L->back->prev;    // temp = -node -x-> back
 
       freeNode(&L->back);
 
-      L->back = temp;               //set new back
+      L->back = temp;               // -node
       L->length--;
       return;
     }
-    //length = 1
+    //only one element
     else {
-      freeNode(&L->back);
-      freeNode(&L->front);
-
-      L->length--;
+      clear(L);      
       return;
     }
   }
@@ -367,22 +371,28 @@ void deleteBack(List L) {
 void delete(List L) {
 
   if (L->cursor) {
-    //case where length >= 2
     if (L->cursor == L->front) {
-      deleteFront(L);
+      deleteFront(L); //checks for case where cursor is only elemnt 
+      L->cursor = NULL;
+      L->index = -1;    
+      return;       
     }
     else if (L->cursor == L->back) {
-      deleteBack(L);
+      deleteBack(L); //checks for case where cursor is only elemnt
+      L->cursor = NULL;
+      L->index = -1;
+      return;
     }
+    //cursor is somewhere in between
     else {
       L->cursor->next->prev = L->cursor->prev;  // node <- curXsor - node
       L->cursor->prev->next = L->cursor->next;  // node - curXsor -> node
       L->length--;
+      freeNode(&L->cursor);
+      L->cursor = NULL;
+      L->index = -1;
+      return;
     }
-    //in all cases
-    freeNode(&L->cursor);
-    L->index = -1;
-    return;
   }
   printf("There is no cursor defined; cannot delete NDF cursor!");
 }
