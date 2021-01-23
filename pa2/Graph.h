@@ -2,31 +2,31 @@
 * Despina Patronas, Dpatrona
 * 2021 Winter CSE 101 pa2
 * Graph.h
-	Prototypes for Graph ADT operations
-
+    Prototypes for Graph ADT operations
 *********************************************************************************/
+
 #pragma once 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "List.h"
 
-#define NIL -1337	//negative int value (# < 0)
-#define INF	-1	//any non positive int value (# <= 0)
+#define NIL -1337   //negative int value (# < 0)
+#define INF -1      //any non positive int value (# <= 0)
 
 typedef struct GraphObj {
-	//NOTE: 0 index is empty for the below
+    //NOTE: 0 index is empty for the below
 
-	List *adj;		// array of lists for adjacency list vertices
+    List *adj;      // array of lists for adjacency list vertices
 
-  //BFS sets these fields
-	int * color;	// represent the color colors 1 = white, 2 = gray, 3 = black
-	int * parent;	// # of parent of vertex
-	int * distance;	// # distance/ DEPTH from the source
+    //BFS sets these fields
+    int * color;    // represent the color colors 1 = white, 2 = gray, 3 = black
+    int * parent;   // # of parent of vertex
+    int * distance; // # distance/ DEPTH from the source
 
-	int size;		  //# of edges / lines in G
-	int order;		//# vertices in G
-	int source;		//the source vertex (for calling bfs)
+    int size;       //# of edges / lines in G
+    int order;      //# vertices in G
+    int source;     //the source vertex (for calling bfs)
 
 } GraphObj;
 
@@ -36,7 +36,7 @@ typedef GraphObj * Graph;
 
 // Returns a graph pointing to a newly created GraphObj
 // default: n vertices
-// 			no edges (null graph)
+//          no edges (null graph)
 Graph newGraph(int n);
 
 // Frees all dynamically allocated memory corresponding to
@@ -62,8 +62,8 @@ int getSource(Graph G);
 // vertex: u
 //
 // PreCond:
-//		u <= getOrder(G)
-//		u >= 1
+//      u <= getOrder(G)
+//      u >= 1
 int getParent(Graph G, int u);
 
 // Returns distance from most recently used BFS source
@@ -72,19 +72,19 @@ int getParent(Graph G, int u);
 // vertex: u
 //
 // PreCond:
-//		u <= getOrder(G)
-//		u >= 1
+//      u <= getOrder(G)
+//      u >= 1
 int getDist(Graph G, int u);
 
 // Appends to List L shortest path vertices or NIL if no path exists to 'u
 // vertices of the shortest path in Graph from source to 'u'
-// destination: u 			ex: List L -> v1 v2 v3 u
+// destination: u           ex: List L -> v1 v2 v3 u
 //
 // PreCond:
-//		getSource(G) != NIL
-// 		BFS() must be called before getPath()
-// 		u <= getOrder(G)
-//		u >= 1
+//      getSource(G) != NIL
+//      BFS() must be called before getPath()
+//      u <= getOrder(G)
+//      u >= 1
 void getPath(List L, Graph G, int u);
 
 
@@ -97,29 +97,28 @@ void makeNull(Graph G);
 
 
 // Joins u to v
-// vertex: u 	added to adjacency List of v
-// vertex: v 	added to adjacency List of u
+// vertex: u    added to adjacency List of v
+// vertex: v    added to adjacency List of u
 // Lists MUST maintain sorted order by increasing labels
 //
 // PreCond:
-//		u <= getOrder(G) && u >= 1
-//		v <= getOrder(G) && v >= 1
+//      u <= getOrder(G) && u >= 1
+//      v <= getOrder(G) && v >= 1
 void addEdge(Graph G, int u, int v);
 
 // Inserts new directed edge from u to v
-// vertex v: 	added to adjacency List of u
+// vertex v:    added to adjacency List of u
 // note: List v unchanged
 //
 // PreCond:
-//		u <= getOrder(G) && u >= 1
-//		v <= getOrder(G) && v >= 1
+//      u <= getOrder(G) && u >= 1
+//      v <= getOrder(G) && v >= 1
 void addArc(Graph G, int u, int v);
 
 // Run BFS algo on graph G with
 // source: s
 // Sets color, distance, parent, and source fields of G
 void BFS(Graph G, int s);
-
 
 //--- Other operations -----------------------------------------------------------
 
