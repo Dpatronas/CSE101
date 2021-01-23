@@ -1,6 +1,6 @@
 /*********************************************************************************
 * Despina Patronas, Dpatrona
-* 2021 Winter CSE 101 pa1
+* 2021 Winter CSE 101 pa2
 * Graph.h
 	Prototypes for Graph ADT operations
 
@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "List.h"
 
-#define NIL -9	//negative int value (# < 0)
+#define NIL -1337	//negative int value (# < 0)
 #define INF	-1	//any non positive int value (# <= 0)
 
 typedef struct GraphObj {
@@ -19,11 +19,12 @@ typedef struct GraphObj {
 
 	List *adj;		// array of lists for adjacency list vertices
 
+  //BFS sets these fields
 	int * color;	// represent the color colors 1 = white, 2 = gray, 3 = black
 	int * parent;	// # of parent of vertex
 	int * distance;	// # distance/ DEPTH from the source
 
-	int size;		//# of edges / lines in G
+	int size;		  //# of edges / lines in G
 	int order;		//# vertices in G
 	int source;		//the source vertex (for calling bfs)
 
@@ -128,9 +129,9 @@ void printGraph(FILE* out, Graph G);
 
 // Decides where to put new integer into adjacency list
 // Maintain ascending order of vertex adjacency list
+// No duplicates are allowed
 //
 // G: Graph where vertex lives
 // L: adjacency List of vertex
 // x: integer to add to list
-//
 void sort( Graph G, List L, int x);
