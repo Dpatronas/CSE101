@@ -96,8 +96,7 @@ int getSize(Graph G) {
 // Returns source vertex most recently used in BFS()
 // returns NIL if BFS() has not been called
 int getSource(Graph G) {
-	if (!G->source) {
-    printf("BFS hasnt been called.. no source");
+	if (G->source == NIL) {
 		return NIL;
 	}
 	return G->source;
@@ -108,15 +107,13 @@ int getSource(Graph G) {
 // PreCond:
 //		u <= getOrder(G) && u >= 1
 int getParent(Graph G, int u) {
-  if (!G->source) {
-    printf("BFS hasnt been called.. no source");
+  if (G->source == NIL) {
 		return NIL;
 	}
-  if ( u >= 1 && u <= getOrder(G) ) {
+  else if ( u >= 1 && u <= getOrder(G) ) {
 	  return G->parent[u];
   }
   //if precondition not met
-  printf("out of bounds vertex.. cannot access parent");
   return NIL;
 }
 
@@ -125,14 +122,14 @@ int getParent(Graph G, int u) {
 // PreCond:
 //		u <= getOrder(G) && u >= 1
 int getDist(Graph G, int u) {
-	if (!G->source) {
-		return NIL;
+	if (G->source == NIL) {
+		return INF;
 	}
 	//make sure the parent index will be valid
 	if ( u >= 1 && u <= getOrder(G) ) {
 		return G->distance[u];
 	}
-  return NIL;
+  return INF;
 }
 
 // Appends to List L shortest path vertices or NIL if no path exists to 'u'
@@ -145,7 +142,7 @@ int getDist(Graph G, int u) {
 void getPath(List L, Graph G, int u) {
 
   //if BFS wasnt called there is no source
-	if (!getSource(G)) {
+	if (getSource(G) == NIL) {
 		return;
 	}
   //trivial path
@@ -161,7 +158,7 @@ void getPath(List L, Graph G, int u) {
 		  getPath(L, G, G->parent[u]);  //call functin on the parent of u until no parent can be called
       append(L,u); //start populating the List starting with parent->->..u	
 	}
-  else printf("\nu is out of bounds..\n");
+  //else printf("\nu is out of bounds..\n");
 }
 
 //--- Manipulation procedures ----------------------------------------------------
@@ -209,7 +206,7 @@ void addEdge(Graph G, int u, int v) {
     dupe = 0;    
   }
   else {
-    printf("\nVertex(s) out of bounds! U:%d V:%d (Order= %d) Aborting Add Edge..\n", u, v, getOrder(G));
+    //printf("\nVertex(s) out of bounds! U:%d V:%d (Order= %d) Aborting Add Edge..\n", u, v, getOrder(G));
   }
 }
 
@@ -242,7 +239,7 @@ void addArc(Graph G, int u, int v) {
 		}
 	}
   else {
-    printf("\nArc out of bounds! U:%d V:%d Order=%d Aborting Add Arc..\n", u, v, getOrder(G));
+    //printf("\nArc out of bounds! U:%d V:%d Order=%d Aborting Add Arc..\n", u, v, getOrder(G));
   }
 }
 
