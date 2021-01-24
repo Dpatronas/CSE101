@@ -131,7 +131,7 @@ int main(int argc, char* argv[]){
 /*OUTPUT PART 2 : Print Paths **************************************/
 
     //path is unreachable
-    if (getDist(G,destin) == NIL ) {
+    if (getDist(G,destin) == INF ) {
       fprintf(out,"\n\nThe distance from %d to %d is infinity", source, destin);
       fprintf(out,"\nNo %d-%d path exists", source, destin);
     }
