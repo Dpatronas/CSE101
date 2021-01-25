@@ -246,8 +246,8 @@ void BFS(Graph G, int s) {
   G->source = s;
 
   //set all but source..
-  for (int x = 2; x <= getOrder(G); x++) {
-    if (i != s) {
+  for (int x = 1; x <= getOrder(G); x++) {
+    if (x != s) {
       G->color[x] = 1;      //white
       G->distance[x] = INF; //NDF
       G->parent[x] = NIL;   //NDF
