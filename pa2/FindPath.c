@@ -14,8 +14,6 @@ Handles IO operations
 
     File Output:
       Print adjacency list representation of graph to outfile
-        s d   (lines vertices pairs)
-        s1 d1 (source destination)
 
   Part 2)
     File Input:
@@ -24,7 +22,6 @@ Handles IO operations
         0 0   (terminating dummy line)
 
 Perform Breadth First Search (BFS) from source vertex
-Assigns parent vertex to every vertex in graph. Parent vertex (may be NIL)
 
     File Output:
         (using results of BFS)
