@@ -11,9 +11,6 @@
 //dupe checker for handling size of Graph properly
 static int DUPE = 0;
 
-//check if bfs has been called
-int PRE = 0;
-
 //-- Constructors-Destructors ----------------------------------------------------
 
 // Returns a graph pointing to a newly created GraphObj
@@ -91,19 +88,28 @@ int getSize(Graph G) {
 // returns NIL if DFS() has not been called
 // PreCond: 1<=u<=getOrder(G)
 int getParent(Graph G, int u) {
-  return G->parent[u];
+  if (u >= 1 && u <= getOrder(G) )
+    return G->parent[u];
+
+  return -1;
 }
 
 // returns UNDEF if DFS() has not been called
 // PreCond: 1<=u<=getOrder(G)
 int getDiscover(Graph G, int u) {
-  return G->discov[u];
+  if (u >= 1 && u <= getOrder(G) )
+    return G->discov[u];
+  
+  return -1;
 }
 
 // returns UNDEF if DFS() has not been called
 // PreCond: 1<=u<=getOrder(G)
 int getFinish(Graph G, int u) {
-  return G->finish[u];
+  if (u >= 1 && u <= getOrder(G) )
+   return G->finish[u];
+
+  return -1;
 }
 
 //--- Manipulation procedures ----------------------------------------------------
@@ -201,9 +207,8 @@ void Visit(Graph G, int u, int *time, List *S) {
 // Pre: length(S)==getOrder(G)
 void DFS(Graph G, List S) {
 
-  PRE = 1;
-
   if (length(S) != getOrder(G)) {
+    printf("\nThe List vertices do not much the Graph\n");
     return;
   }
 
