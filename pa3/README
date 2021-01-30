@@ -22,8 +22,8 @@
 		Tests the Graph ADT functions including:
 
 			-Construction of empty graph - default fields
-			-Adding Edges (undirected Lines) to a Linear Graph and non Linear Graph
-			-Adding Arcs (directed line )to a linear and non Linear Graph
+			-Adding Edges (undirected Lines) to Graph
+			-Adding Arcs (directed line ) to Graph
 
 			-Checks the size increments correctly for undirected arc
 			-Checks the size increments correctly for directed edges
@@ -31,13 +31,13 @@
 			-Checks that no duplicate edges and arcs are allowed to be added
 			-Checks that no out of bounds edges and arcs are allowed to be added
 
-			-Tests DFS outputs adjacencies correctly
-
-			-Tests DFS outputs List correctly (based on 'finished' vertex descending order)
-
 			-Checks the adjacency list data is in ascending order & getter functions return proper values throughout the tests
 
-			-Checks transpose works correctly 
+			-Tests DFS inputs List vertices & adj correctly
+
+			-Tests DFS outputs List stack correctly (based on 'finished' vertex descending order)
+
+			-Checks transpose works correctly
 
 			-Checks copyGraph works correctly
 
