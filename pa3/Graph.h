@@ -17,19 +17,19 @@
 
 typedef struct GraphObj {
 
-    //Graph fields
-    int order;      //# vertices in G set upon construction
-    int size;       //# of edges / lines in G
+  //Graph fields
+  int order;      //# vertices in G set upon construction
+  int size;       //# of edges / lines in G
 
-    //vertex fields 
-    List *adj;      // array of lists for adjacency list vertices
+  //vertex fields 
+  List *adj;      // array of lists for adjacency list vertices
 
-    //DFS sets these fields
-                    //      undiscovered   discovered   finished
-    int * color;    // colors (white = 1) (gray = 2) (black = 3)
-    int * discov;   // time to discover a vertex
-    int * finish;   // time to finish a vertex
-    int * parent;   // vertex parent of a vertex
+  //DFS sets these fields
+                  //      undiscovered   discovered   finished
+  int * color;    // colors (white = 1) (gray = 2) (black = 3)
+  int * discov;   // time to discover a vertex
+  int * finish;   // time to finish a vertex
+  int * parent;   // vertex parent of a vertex
 
 } GraphObj;
 
