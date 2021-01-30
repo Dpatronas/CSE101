@@ -1,0 +1,78 @@
+/*********************************************************************************
+* Despina Patronas, Dpatrona
+* 2021 Winter CSE 101 pa3
+	README
+*********************************************************************************/
+
+	List.h
+		Includes the definitions of structures and prototypes for a Linked List ADT
+	
+	List.c
+		Implementation of List.h
+	
+	Graph.h
+		Includes the definitions of structures and prototypes for a Graph ADT
+		This graph is specifically meant to be used for DFS
+
+	Graph.c
+		Implementation of Graph.h
+		This graph is specifically meant to be used for DFS
+
+	GraphTest.c
+		Tests the Graph ADT functions including:
+
+			-Construction of empty graph - default fields
+			-Adding Edges (undirected Lines) to a Linear Graph and non Linear Graph
+			-Adding Arcs (directed line )to a linear and non Linear Graph
+
+			-Checks the size increments correctly for undirected arc
+			-Checks the size increments correctly for directed edges
+
+			-Checks that no duplicate edges and arcs are allowed to be added
+			-Checks that no out of bounds edges and arcs are allowed to be added
+
+			-Tests DFS outputs adjacencies correctly
+
+			-Tests DFS outputs List correctly (based on 'finished' vertex descending order)
+
+			-Checks the adjacency list data is in ascending order & getter functions return proper values throughout the tests
+
+			-Checks transpose works correctly 
+
+			-Checks copyGraph works correctly
+
+			-Checks Graphs Nullify to default state
+			-Frees Graphs from Heap
+
+				*NOTE: note prints to STDOUT / console shell..
+					no input / output file needed
+
+	FindComponents.c
+		IO operations
+			Reads an order / vertices number from infile
+			Creates a graph based on input order
+			
+			Reads edge vertices pairs and generates a graph
+
+			Prints the adjacency list of each vertex in Graph
+
+			Runs DFS algorithm on graph
+
+			Prints the # of strongly connected components
+			Prints elements within each component found in topographical order
+
+			Clears the heap of all memory usage (hopefully)..
+
+				*NOTE: print will output to specified outfile
+						Read will read from specified infile
+
+	Makefile
+		make FindComponents      makes FindComponents executable
+		make GraphTest           makes GraphTest executable
+		make clean               removes all binaries
+		make checkFind           tests FindComponents for memory leaks on in3
+		make checkClient         tests GraphTest for memory leaks
+
+	run example:
+		$./FindComponents input.txt output.txt
+		$./GraphTest
