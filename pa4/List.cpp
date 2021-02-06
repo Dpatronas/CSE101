@@ -13,7 +13,6 @@
 #include<string>
 
 #include "List.h"
-
 using namespace std;
 
 // Private Constructors ----------------------------------------------------
@@ -186,7 +185,6 @@ void List::insertAfter(int x) {
 
 	Node *nn = new Node(x);
 
-	//List is empty
 	if (isEmpty()) {
 		//fields of nn
 		nn->prev = frontDummy;
@@ -225,7 +223,7 @@ void List::insertAfter(int x) {
 		afterCursor->prev = nn;
 	}
 	//All cases
-	num_elements++;	//increment size of List
+	num_elements++;	  //increment size of List
 	afterCursor = nn;	//set new after cursor
 
 }
@@ -236,7 +234,7 @@ void List::insertAfter(int x) {
 void List::insertBefore(int x) {
 
 	Node *nn = new Node(x);
-	//List is empty
+
 	if (isEmpty()) {
 		//fields of nn
 		nn->prev = frontDummy;
@@ -273,8 +271,8 @@ void List::insertBefore(int x) {
 		afterCursor->prev = nn;
 	}
 	//all cases:
-	pos_cursor++;	//increment cursor
-	num_elements++;	//increment size of list
+	pos_cursor++;	      //increment cursor
+	num_elements++;	    //increment size of list
 	beforeCursor = nn;	//set new before cursor
 
 }
@@ -379,37 +377,38 @@ void List::cleanup() {
   if (isEmpty()) {
     return;
   }
-	//save the initial position of the cursor
+	//save initial position of the cursor
 	int saved = position();
-  //a pointer to front element for iteration of inner loop
+  //a pointer for iteration of inner loop
   Node *ptr = frontDummy->next;
 
+  //Outer loop: ptr steps through each element of the list
 	for (int i = 1; i <= size(); i++) {
-    moveFront(); //move cursor back to first position
-
+    
+    moveFront(); //reset cursor
     for (int j = i; j > 0; j--) { //shift the cursor to be after the ptr
-      int m = moveNext();
+      moveNext();
     }
-    //compare after cursor  elemts to ptr
+
+    //Inner Loop: cursor step through elements after ptr
     while (afterCursor != backDummy) {
 
-      //compare data before cursor and ptr data to erase duplicate
+      //Find duplicates and erase them
       if (afterCursor->data == ptr->data) {
 
-        //compensate for the removal for the saved position index
+        //reflect removal affect on original list cursor position
         if (position() < saved) {
           saved--;
-
         }
         eraseAfter();
         continue;
       }
-      moveNext(); //move the cursor until it reaches the end
+      moveNext(); //move the cursor until it reaches the end of list
     }
     ptr = ptr->next; //move ptr to next node
   }
 
-  //set the position to the saved value
+  //set the new cursor position for the list once cleanup is done
   moveFront();
   for (position(); position() < saved; moveNext());
 }
@@ -444,7 +443,6 @@ List List::concat(const List& L) {
   }
   return R;
 }
-
 
 // Other Functions ---------------------------------------------------------
 
