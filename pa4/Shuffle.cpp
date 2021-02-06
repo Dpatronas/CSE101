@@ -20,11 +20,6 @@ int shuffle (int n) {
 
   int shuffles = 0; //keeps track of the shuffles to get back to original list
 
-  //deck size of 1 does not need to be shuffled
-  if(n == 1) {
-    return 1;
-  }
-
   List O; //original deck
   List S; //second list, small # elements
   List B; //third list big # elements
@@ -38,10 +33,10 @@ int shuffle (int n) {
   //set Merged list as original for iteration of initial list
   M = O; 
 
+
   while(1) { //keep looping until original is found
 
     M.moveFront();
-
     //SPLIT deck into 2 Lists (steps through the merged list)
     for (M.position(); M.position() <= n; M.moveNext() ) {
 
@@ -100,14 +95,14 @@ int main(int argc, char * argv[]) {
   int n = atoi(argv[1]);
   if (n <= 0) {
     cerr << "No deck to shuffle!";
-    EXIT_FAILURE;
+    return(EXIT_FAILURE);
   }
 
   cout << "deck size       shuffle count" << endl;
   cout << "------------------------------" << endl;
 
   for (int i = 1; i <= n; i++ ) {
-    printf(" %-15d %d\n", i, shuffle(i));
+    printf(" %-15d %d\n", i, shuffle(i-1));
   }
 
   return(EXIT_SUCCESS);
