@@ -442,7 +442,6 @@ List List::concat(const List& L) {
     R.insertBefore(M->data);
     M = M->next;
   }
-  R.pos_cursor = 0;
   return R;
 }
 
@@ -521,6 +520,7 @@ List& List::operator=( const List& L ) {
     std::swap(afterCursor,  temp.afterCursor);
   }
   //return this List
+  moveFront();
   return *this;
   //Note: copy is deleted upon return..
 }
