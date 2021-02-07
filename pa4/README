@@ -1,0 +1,73 @@
+/*********************************************************************************
+* Despina Patronas, Dpatrona
+* 2021 Winter CSE 101 pa4
+	README
+*********************************************************************************/
+
+	List.h
+		Includes the definitions of structures and prototypes for a Linked List ADT
+	
+	List.cpp
+		Implementation of List.h
+
+	ListTest.cpp
+		Tests the List.cpp ADT functions including:
+
+			-Creation of default lists fields are correct
+
+			-InsertBefore and insertAfter on a default / filled list regardless of cursor position
+
+			-MoveNext and MovePrev changes cursor position and pointer nodes to before and after
+				-returns the element moved over
+				-will not move out of bounds instead just returns -1
+
+			-EraseBefore and eraseAfter on a default / filled list regardless of cursor position
+				-will exitFailure if trying to erase out of bounds (ie dummy nodes)
+
+			-Clean up removes all duplicates and retains cursor position relative to remaining nodes
+
+			-peekNext and peekPrev returns after / before cursor elements
+				-out of bounds returns -1
+
+			-Checks concat properly joins lists and set position to 0 and fields appropriately
+
+			-FindPrev and FindNext traverse the list and return the cursor at appropriate position
+				if element doesnt exist position becomes either edge [0 or size()] and returns -1
+
+			-clearList sets list to default
+
+			-Deconstructor removes dummy nodes
+
+
+				*NOTE: note prints to console shell. no input / output file needed
+
+	Shuffle.c
+		IO operations
+			Reads a positive integer number from the bash terminal. 
+			This number represents the number of decks to shuffle and their sizes accordingly
+			Each deck starts in sorted order
+			Perfectly shuffles each deck until original sequence is found
+			Outputs onto the terminal the number of shuffles for each deck from [1,n]
+			
+			Example:
+				$./Shuffle 4
+
+				$ deck size | shuffles
+				$ 1			| 1
+				$ 2			| 2
+				$ 3			| 2
+				$ 4			| 4
+				
+			*NOTE: note prints to console shell. no input / output file needed
+
+	Makefile
+		make Shuffle 			makes Shuffle executable
+		make ListTest 			makes GraphTest executable
+		make clean 				removes all binaries
+		make checkFind 			tests Shuffle for memory leaks
+		make ListTest 			tests GraphTest for memory leaks
+
+	Usage:
+		$./Shuffle <positive integer n>
+		$./ListTest
+
