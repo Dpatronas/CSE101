@@ -3,7 +3,8 @@
 // 2021 Winter CSE 101 pa4
 //
 // List.cpp
-// Header file for List ADT.
+//
+// Implementation of List.h
 // List is a double ended queue with a vertical cursor standing between elements.
 // Cursor position is always defined as int from range 0 (at front) to length of List (at back).
 

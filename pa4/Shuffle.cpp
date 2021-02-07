@@ -1,3 +1,12 @@
+//-----------------------------------------------------------------------------
+// Despina Patronas, Dpatrona
+// 2021 Winter CSE 101 pa4
+//
+// Shuffle.cpp
+// performs perfect shuffle on a list size n to 1 (n from user input)
+// returns the amount of shuffles to return list to original ordered state
+//-----------------------------------------------------------------------------
+
 #include<iostream>
 #include<fstream>
 #include<string>

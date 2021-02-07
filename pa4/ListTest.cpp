@@ -2,8 +2,8 @@
 // Despina Patronas, Dpatrona
 // 2021 Winter CSE 101 pa4
 //
-// ListClient.cpp
-// A test client for List ADT
+// ListTest.cpp
+// A test client for new List ADT
 //-----------------------------------------------------------------------------
 #include<iostream>
 #include<string>
