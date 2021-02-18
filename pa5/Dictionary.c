@@ -12,14 +12,14 @@
 #include "Dictionary.h"
 
 //macros defined to easily change the types of key / values
-#define KEY_TYPE char*    //pointer to a string
-#define VAL_TYPE int      //line number
+#define KEY_TYPE char* 	  //pointer to a string
+#define VAL_TYPE int 		  //line number
 
-#define KEY_UNDEF NULL    //default key
-#define VAL_UNDEF -1      //default line
+#define KEY_UNDEF NULL	  //default key
+#define VAL_UNDEF -1		  //default line
 
 #define KEY_FORMAT "%s"   //print key values
-#define VAL_FORMAT "%d"   //print value
+#define VAL_FORMAT "%d"	  //print value
 #define KEY_CMP(x,y) strcmp((x),(y))
 
 #define NIL -1         //value for NIL ptrs = VAL_UNDEF
@@ -29,10 +29,10 @@
 // Define a Node Object
 typedef struct NodeObj {
   KEY_TYPE key;           //String (a line of the given text file)
-  VAL_TYPE data;          //data within the node
-  struct NodeObj* parent; //ptr to a parent node
-  struct NodeObj* left;   //ptr to previous node
-  struct NodeObj* right;  //ptr to next node
+	VAL_TYPE data;				  //data within the node
+	struct NodeObj* parent;	//ptr to a parent node
+	struct NodeObj* left;	  //ptr to previous node
+	struct NodeObj* right;	//ptr to next node
 
 } NodeObj;
 
@@ -54,11 +54,11 @@ Node newNode (int data) {
 }
 
 typedef struct DictionaryObj {
-  Node nill;    //ptr to all nill ends of the tree
-  Node root;    //ptr to the start of the tree
-  Node cursor;  //keeps track of the current node for iterations
-  int size;     //number of objects in the tree
-  int unique;   //boolean value to disable or enable duplicates (0=dupes | 1=no dupes)
+	Node nill;		//ptr to all nill ends of the tree
+  Node root;	  //ptr to the start of the tree
+	Node cursor;	//keeps track of the current node for iterations
+	int size;	  	//number of objects in the tree
+	int unique;		//boolean value to disable or enable duplicates (0=dupes | 1=no dupes)
 
 }DictionaryObj;
 
@@ -327,6 +327,9 @@ void delete(Dictionary D, KEY_TYPE k) {
   //Case 0: DNE
   if (lookup(D, k) == VAL_UNDEF) {
     return;
+  }
+  if(search == D->cursor) {
+    D->cursor = D->nill;
   }
   if (search->left == D->nill) {
     Transplant(D, search, search->right);
