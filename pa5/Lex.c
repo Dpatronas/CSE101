@@ -90,11 +90,8 @@ int main(int argc, char * argv[]){
    }
    //print the list inOrder
    printDictionary(out, Lex);
-
+  
   makeEmpty(Lex);
-  token = NULL;
-  fclose(in);
-  fclose(out);
   freeDictionary(&Lex);
   return(0);
 }
