@@ -85,12 +85,23 @@ Dictionary newDictionary(int unique) {
   return (D);
 }
 
+// Frees heap of allocated memory pointed to by pointer Node (*pN)
+// sets *pN to NULL
+void freeNode(Node *pN) {
+  if (pN && *pN) {
+    memset(*pN, 0, sizeof(NodeObj)); //sets next and prev back to null
+    free(*pN);
+    *pN = NULL;
+  }
+}
+
 // freeDictionary()
 // Frees heap memory associated with *pD, sets *pD to NULL.
 void freeDictionary(Dictionary* pD) {
   if(pD && *pD) {
     makeEmpty(*pD);
     memset(*pD, 0, sizeof(DictionaryObj));
+    free(*pD);
     pD = NULL;
   }
 }
@@ -335,10 +346,12 @@ void delete(Dictionary D, KEY_TYPE k) {
   }
   if (search->left == D->nill) {
     Transplant(D, search, search->right);
+    freeNode(&search);
     D->size--;
   }
   else if (search->right == D->nill) {
     Transplant(D, search, search->left);
+    freeNode(&search);
     D->size--;
   }
   else {
@@ -351,18 +364,17 @@ void delete(Dictionary D, KEY_TYPE k) {
     Transplant(D, search, y);
     y->left = search->left;
     y->left->parent = y;
+    freeNode(&search);
     D->size--;
   }
 }
 
-// prints BST data keys. Ends by printing the root.
-// useful for freeing nodes (from bottom left up, then from bottom right up)
+// Freeing node (post order)
 void postOrderDelete(Dictionary D, Node x) {
   if (x->data != NIL) {
     postOrderDelete(D,x->left);
     postOrderDelete(D,x->right);
     delete(D,x->key);
-    // x->left = NULL; x->right = NULL; x->key = NULL; free(x);
   }
 }
 
