@@ -91,5 +91,7 @@ int main(int argc, char * argv[]){
    //print the list inOrder
    printDictionary(out, Lex);
   
+  makeEmpty(Lex);
+  freeDictionary(&Lex);
   return(0);
 }
