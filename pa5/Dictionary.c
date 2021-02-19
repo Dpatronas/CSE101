@@ -324,12 +324,13 @@ void Transplant(Dictionary D, Node u, Node v) {
 void delete(Dictionary D, KEY_TYPE k) {
 
   Node search = TreeSearch(D->root, k);
+
+  if(search == D->cursor) {
+    D->cursor = D->nill;
+  }
   //Case 0: DNE
   if (lookup(D, k) == VAL_UNDEF) {
     return;
-  }
-  if(search == D->cursor) {
-    D->cursor = D->nill;
   }
   if (search->left == D->nill) {
     Transplant(D, search, search->right);
@@ -360,6 +361,7 @@ void postOrderDelete(Dictionary D, Node x) {
     postOrderDelete(D,x->left);
     postOrderDelete(D,x->right);
     delete(D,x->key);
+    // x->left = NULL; x->right = NULL; x->key = NULL; free(x);
   }
 }
 
@@ -419,11 +421,16 @@ VAL_TYPE currentVal(Dictionary D) {
   return D->cursor->data;
 }
 
-// next()
+// next() returns the new cursors data value
 // Move cursor to the next element in the BST (follows in order)
 // If cursor is not undefined returns VAL_UNDEF.
 // If cursor reaches an end pair returns VAL_UNDEF. 
 VAL_TYPE next(Dictionary D) {
+  //no cursor defined
+  if (D->cursor == D->nill) {
+    return VAL_UNDEF;
+  }
+  //reached root
   if(TreeSuccessor(D->cursor) == D->nill) {
     D->cursor = D->nill;
     return VAL_UNDEF;
@@ -432,12 +439,16 @@ VAL_TYPE next(Dictionary D) {
   return D->cursor->data;
 }
 
-
-// prev()
+// prev() returns the new cursors data value
 // Move cursor to the prev element in the BST (follows in order) 
 // If cursor is not undefined returns VAL_UNDEF.
 // If cursor reaches an end pair returns VAL_UNDEF. 
 VAL_TYPE prev(Dictionary D) {
+  //no cursor defined
+  if (D->cursor == D->nill) {
+    return VAL_UNDEF;
+  }
+  //reached leaf
   if(TreePredecessor(D->cursor) == D->nill) {
     D->cursor = D->nill; 
     return VAL_UNDEF;
@@ -445,7 +456,6 @@ VAL_TYPE prev(Dictionary D) {
   D->cursor = TreePredecessor(D->cursor);
   return D->cursor->data;
 }
-
 
 // Other operations -----------------------------------------------------------
 
