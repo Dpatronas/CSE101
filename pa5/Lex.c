@@ -85,7 +85,7 @@ int main(int argc, char * argv[]){
   //make the empty list
   Dictionary Lex = newDictionary(1);
 
-   for(i = 0; i < line_count; i++){
+   for(i = 0; i < line_count-1; i++){
       insert(Lex, tok_arr[i], i);
    }
    //print the list inOrder
