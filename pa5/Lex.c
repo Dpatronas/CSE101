@@ -5,8 +5,9 @@
     IO operations
     Creates a string array populated by the lines of:
     infile input strings as its elements
-    creates an empty Dictionary which is populated by the input file strings:
-    output to outfile is sorted strings
+    creates an empty list which is populated lexicographically by:
+    using the functions within List.h
+    outfile output as sorted strings
 *********************************************************************************/
 
 #include <stdio.h>
@@ -78,10 +79,8 @@ int main(int argc, char * argv[]){
     }
     //allocate space for each string as an element of the array
     tok_arr[i] = strcpy(malloc(strlen(tokenBuffer) +1),tokenBuffer);
-    printf("%s\n", tok_arr[i]);
     i++;
   }
-    printf("\n%d\n", line_count);
 
   //make the empty list
   Dictionary Lex = newDictionary(1);
