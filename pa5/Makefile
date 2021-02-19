@@ -15,7 +15,7 @@ TOP              = Lex
 TOP_OBJ          = $(TOP).o
 TOP_SRC          = $(TOP).c
 ADT              = Dictionary
-TEST             = $(ADT)Client
+TEST             = $(ADT)Test
 TEST_OBJ         = $(TEST).o
 TEST_SRC         = $(TEST).c
 ADT_OBJ          = $(ADT).o
@@ -49,5 +49,3 @@ check1 : $(TEST)
 
 check2 : $(TOP)
 	$(MEMCHECK) $(TOP) in4 junk4
-
-
