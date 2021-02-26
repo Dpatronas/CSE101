@@ -22,7 +22,7 @@
 #define VAL_FORMAT "%p"   //pointer value
 #define KEY_CMP(x,y) strcmp(x,y)
 
-#define NIL NULL         //value for NIL ptrs defined as tree leaves
+#define NIL (void*)0      //value for NULL ptrs defined as tree leaves
 
 // Constructors-Destructors ---------------------------------------------------
 
@@ -40,7 +40,7 @@ typedef struct NodeObj {
 typedef NodeObj* Node;
 
 // Returns reference to a new NodeObj
-Node newNode (VAL_TYPE data) {
+Node newNode (KEY_TYPE key, VAL_TYPE data) {
   Node N = (Node)malloc(sizeof(NodeObj));
   if (!N) {
     exit(1);
@@ -74,7 +74,7 @@ Dictionary newDictionary(int unique) {
     exit(1);
   }
   //dummy node creation filled with garbage data ptr
-  Node nillNode = newNode(VAL_UNDEF);
+  Node nillNode = newNode(KEY_UNDEF, VAL_UNDEF);
   nillNode->left=nillNode->right= nillNode;
   //set the fields
   D->nill = nillNode;   //set nill node as dummy node
@@ -98,8 +98,6 @@ void freeDictionary(Dictionary* pD) {
 
 // Access functions -----------------------------------------------------------
 
-// size()
-// Returns the number of (key, value) pairs in Dictionary D.
 int size(Dictionary D) {
   if (!D) {
     exit(1);
@@ -107,9 +105,6 @@ int size(Dictionary D) {
   return D->size;
 }
 
-// getUnique()
-// Returns true (1) if D requires that all pairs have unique keys. Returns
-// false (0) if D accepts distinct pairs with identical keys.
 int getUnique(Dictionary D) {
   if (!D) {
     exit(1);
@@ -121,13 +116,12 @@ int getUnique(Dictionary D) {
 // Cost = Theta(height x). Worst case is degenerative BST aka linked list
 // Helper for lookup operations or delete
 Node TreeSearch(Node x, KEY_TYPE k) {
-  //returns NIL = -1 = Not found
-  //OR returns key rooted at x
-  if( x->data == NIL || k == x->key ) {
-    return x; 
+  //returns key rooted at x or NULL
+  if( x->data == VAL_UNDEF || k == x->key ) {
+    return x;
   }
   //go down the left subtree to search for rooted node with k
-  else if ( KEY_CMP(k,x->key) < 0) {
+  else if ( KEY_CMP(k, x->key) < 0) {
     return TreeSearch(x->left, k);
   }
   //go down right subtree to search for rooted node with k
@@ -136,8 +130,8 @@ Node TreeSearch(Node x, KEY_TYPE k) {
 
 // lookup()
 // If Dictionary D contains a (key, value) pair whose key matches k (i.e. if
-// KEY_CMP(key, k)==0), then returns value. If D contains no such pair, then
-// returns VAL_UNDEF.
+// KEY_CMP(key, k)==0), then returns value ptr. 
+// If D contains no such pair, then returns VAL_UNDEF aka Null ptr.
 // uses TreeSearch
 VAL_TYPE lookup(Dictionary D, KEY_TYPE k) {
 
@@ -322,7 +316,7 @@ void RightRotate(Dictionary D, Node x) {
     x->parent->left = y;
   }
   //x is y right child
-  x->right = x;
+  y->right = x;
   x->parent = y;
 }
 
@@ -344,15 +338,13 @@ void InsertFix(Dictionary D, Node z) {
           z = z->parent;                    // case 2
           LeftRotate(D, z);                 // case 2
         }
-
         z->parent->color = 'b';             // case 3
         z->parent->parent->color = 'r';     // case 3
         RightRotate(D, z->parent->parent);  // case 3
       }
     }
     else {
-       Node y = z->parent->parent->left;
-
+       y = z->parent->parent->left;
        if (y->color == 'r') {
           z->parent->color = 'b';            // case 4
           y->color = 'b';                   // case 4
@@ -379,52 +371,44 @@ void InsertFix(Dictionary D, Node z) {
 // If getUnique(D) is true (1), then the precondition lookup(D, k)==VAL_UNDEF is enforced. 
 void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
   
-  // if (lookup(D,k) == v ) {  //check if word was inserted if so increment occurances
-  //   *v++;
-  // }
-  Node nn = newNode(v);
-  nn->key = k; 
-  nn->data = v;
+  Node nn = newNode(k, v); //using pointer data
+  //set key //set pointer address
+  nn->key = k; nn->data = v; 
   nn->left = nn->right = D->nill;
-
+  
   Node y = D->nill;
   Node x = D->root;
 
-  if (D->unique == 0 || lookup(D,k) == VAL_UNDEF) {
-
-    //traverse the tree
-    while (x != D->nill) {
-      y = x;
-      //chose the insertion spot
-      if (KEY_CMP(nn->key, y->key) < 0) {
-        x = x->left;
-      }
-      else {
-        x = x->right;
-      }
+  //traverse the tree
+  while (x != D->nill) {
+    y = x;
+    //chose the insertion spot
+    if (KEY_CMP(nn->key, x->key) < 0) {
+      x = x->left;
     }
-    nn->parent = y;
-
-    //empty tree case
-    if (y == D->nill) {
-      D->root = nn;
-      D->size++;
-      return;
+    else {
+      x = x->right;
     }
-    //place nn on the left
-    else if (KEY_CMP(nn->key,y->key) < 0) {
-      y->left = nn;
-      D->size++;
-      nn->color = 'r';      //sets the nn to red 
-      InsertFix(D, nn);
-      return;
-    }
-    //Otherwise place nn on the right
-    y->right = nn;
-    D->size++;
-    nn->color = 'r';      //sets the nn to red 
-    InsertFix(D, nn);
   }
+  nn->parent = y;
+
+  //empty tree case //root remains black
+  if (y == D->nill) {
+    D->root = nn;
+  }
+  //place nn on the left
+  else if (KEY_CMP(nn->key,y->key) < 0) {
+    y->left = nn;
+  }
+  //Otherwise place nn on the right
+  else {
+    y->right = nn;
+  }
+  //all cases
+  nn->left = nn->right = D->nill;
+  D->size++;
+  nn->color = 'r';      //sets the nn to red 
+  InsertFix(D, nn);
 }
 
 // Replaces one subtree as a child of its parent with another subtree
@@ -446,39 +430,122 @@ void Transplant(Dictionary D, Node u, Node v) {
   v->parent = u->parent;
 }
 
-// // delete()
-// // Remove the pair whose key is k from Dictionary D.
-// // Pre: lookup(D,k)!=VAL_UNDEF (i.e. D contains a pair whose key is k.)
+void RB_DeleteFixUp(Dictionary D, Node x) {
+  Node w;
+  while ( (x != D->root) && (x->color == 'b') ) {
+    if (x == x->parent->left) {
+      w = x->parent->right;
+
+        if (w->color == 'r') {
+          w->color = 'b';               // case 1
+          x->parent->color = 'r';       // case 1
+          LeftRotate(D, x->parent);     // case 1
+          w = x->parent->right;         // case 1
+        }
+
+        else if ((w->left->color == 'b') && (w->right->color == 'b')) {
+          w->color = 'r';               // case 2
+          x = x->parent;                // case 2
+         }
+
+        else {
+          if (w->right->color == 'b') {
+            w->left->color = 'b';       // case 3
+            w->color = 'r';             // case 3
+            RightRotate(D, w);          // case 3
+            w = x->parent->right;       // case 3
+          }
+          w->color = x->parent->color;  // case 4
+          x->parent->color = 'b';       // case 4
+          w->right->color = 'b';        // case 4
+          LeftRotate(D, x->parent);     // case 4
+          x = D->root;                  // case 4
+        }
+      }
+
+    else {
+      w = x->parent->left;
+
+      if (w->color == 'r') {
+        w->color = 'b';                 // case 5
+        x->parent->color = 'r';         // case 5
+        RightRotate(D, x->parent);      // case 5
+        w = x->parent->left;            // case 5
+      }
+    
+      else if ((w->right->color == 'b') && (w->left->color == 'b')) {
+        w->color = 'r';                 // case 6
+        x = x->parent;                  // case 6
+      }
+      else {
+        if (w->left->color == 'b') {
+          w->right->color = 'b';        // case 7
+          w->color = 'r';               // case 7
+          LeftRotate(D, w);             // case 7
+          w = x->parent->left;          // case 7
+        }
+        w->color = x->parent->color;    // case 8
+        x->parent->color = 'b';         // case 8
+        w->left->color = 'b';           // case 8
+        RightRotate(D, x->parent);      // case 8
+        x = D->root;                    // case 8        
+      }
+    }
+  }
+  x->color = 'b';
+}
+
 void delete(Dictionary D, KEY_TYPE k) {
 
-  Node search = TreeSearch(D->root, k);
-
-  if(search == D->cursor) {
-    D->cursor = D->nill;
-  }
-  //Case 0: DNE
-  if (lookup(D, k) == VAL_UNDEF) {
+  if(lookup(D,k) == VAL_UNDEF) {
     return;
   }
-  if (search->left == D->nill) {
-    Transplant(D, search, search->right);
+
+  //see if the node exists
+  Node z = TreeSearch(D->root, k);
+
+  //see if cursor deleted
+  if(z == D->cursor) {
+    D->cursor = D->nill;
+  }
+
+  Node y; Node x;
+  y = z;
+  char y_original_color = y->color;
+
+  if (z->left == D->nill) {
+    x = z->right;
+    Transplant(D, z, z->right);
     D->size--;
   }
-  else if (search->right == D->nill) {
-    Transplant(D, search, search->left);
+
+  else if (z->right == D->nill) {
+    x = z->left;
+    Transplant(D, z, z->left);
     D->size--;
   }
+
   else {
-    Node y = TreeMinimum(search->right);
-    if (y->parent != search) {
+    y = TreeMinimum(z->right);
+    y_original_color = y->color;
+    x = y->right;
+
+    if (y->parent == z ) {
+      x->parent = y;
+    }
+    else {
       Transplant(D, y, y->right);
-      y->right = search->right;
+      y->right = z->right;
       y->right->parent = y;
     }
-    Transplant(D, search, y);
-    y->left = search->left;
+    Transplant(D, z, y);
+    y->left = z->left;
     y->left->parent = y;
+    y->color = z->color;
     D->size--;
+  }
+  if (y_original_color == 'b') {
+    RB_DeleteFixUp(D, x);
   }
 }
 
@@ -576,6 +643,7 @@ VAL_TYPE prev(Dictionary D) {
 
 // Other operations -----------------------------------------------------------
 
+
 // printDictionary()
 // Prints the keys (only) of D in an order determined by the parameter ord.
 // If ord is "pre", "in" or "post", executes the corresponding tree traversal
@@ -596,3 +664,4 @@ void printDictionary(FILE* out, Dictionary D, const char * ord) {
   }
   //else do nothing
 }
+
