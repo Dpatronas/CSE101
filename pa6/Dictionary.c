@@ -47,8 +47,8 @@ Node newNode (KEY_TYPE key, VAL_TYPE data) {
   }
   //default fields of node
   N->parent = N->right = N->left = NIL;
-  N->data = VAL_UNDEF;
-  N->key  = KEY_UNDEF;
+  N->data = data;
+  N->key  = key;
   N->color = 'b';
 
   return (N);
@@ -153,27 +153,28 @@ void inOrderTreeWalk(FILE* out, Node x) {
     inOrderTreeWalk(out, x->left);
     fprintf( out, KEY_FORMAT, x->key);
     fprintf( out, "\n");
-    //fprintf( out, " " VAL_FORMAT "\n", x->data);
     inOrderTreeWalk(out, x->right);
-  }
-}
-
-// prints BST data keys in descending order
-void reverseTreeWalk(Node x) {
-  if (x->data != NIL) {
-    reverseTreeWalk(x->right);
-    printf( KEY_FORMAT " ", x->key);  //processing data
-    reverseTreeWalk(x->left);
   }
 }
 
 // prints BST data keys. Starts by printing the root
 // keys < root = left subtree || keys > root = right subtree
-void preOrderTreeWalk(Node x) {
+void preOrderTreeWalk(FILE* out, Node x) {
   if (x->data != NIL) {
-    printf( KEY_FORMAT " ", x->key);  //processing data
-    preOrderTreeWalk(x->left);
-    preOrderTreeWalk(x->right);
+    fprintf( out, KEY_FORMAT, x->key);
+    fprintf( out, "\n");
+    preOrderTreeWalk( out, x->left);
+    preOrderTreeWalk( out, x->right);
+  }
+}
+
+// Prints BST data keys starting at the root (post order)
+void postOrderTreeWalk(FILE* out, Node x) {
+  if (x->data != NIL) {
+    postOrderTreeWalk( out, x->left);
+    postOrderTreeWalk( out, x->right);
+    fprintf( out, KEY_FORMAT, x->key);
+    fprintf( out, "\n");
   }
 }
 
@@ -371,44 +372,46 @@ void InsertFix(Dictionary D, Node z) {
 // If getUnique(D) is true (1), then the precondition lookup(D, k)==VAL_UNDEF is enforced. 
 void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
   
-  Node nn = newNode(k, v); //using pointer data
-  //set key //set pointer address
-  nn->key = k; nn->data = v; 
-  nn->left = nn->right = D->nill;
-  
-  Node y = D->nill;
-  Node x = D->root;
+  //if allows duplicates or the key doesnt exist
+  if (D->unique == 0 || lookup(D,k) == VAL_UNDEF) {
 
-  //traverse the tree
-  while (x != D->nill) {
-    y = x;
-    //chose the insertion spot
-    if (KEY_CMP(nn->key, x->key) < 0) {
-      x = x->left;
+    Node nn = newNode(k, v); //using pointer data  
+    
+    nn->left = nn->right = D->nill;
+    
+    Node y = D->nill;
+    Node x = D->root;
+
+    //traverse the tree
+    while (x != D->nill) {
+      y = x;
+      //chose the insertion spot
+      if (KEY_CMP(nn->key, x->key) < 0) {
+        x = x->left;
+      }
+      else {
+        x = x->right;
+      }
     }
+    nn->parent = y;
+
+    //empty tree case //root remains black
+    if (y == D->nill) {
+      D->root = nn;
+    }
+    //place nn on the left
+    else if (KEY_CMP(nn->key,y->key) < 0) {
+      y->left = nn;
+    }
+    //Otherwise place nn on the right
     else {
-      x = x->right;
+      y->right = nn;
     }
+    //all cases
+    D->size++;
+    nn->color = 'r';      //sets the nn to red 
+    InsertFix(D, nn);
   }
-  nn->parent = y;
-
-  //empty tree case //root remains black
-  if (y == D->nill) {
-    D->root = nn;
-  }
-  //place nn on the left
-  else if (KEY_CMP(nn->key,y->key) < 0) {
-    y->left = nn;
-  }
-  //Otherwise place nn on the right
-  else {
-    y->right = nn;
-  }
-  //all cases
-  nn->left = nn->right = D->nill;
-  D->size++;
-  nn->color = 'r';      //sets the nn to red 
-  InsertFix(D, nn);
 }
 
 // Replaces one subtree as a child of its parent with another subtree
@@ -503,7 +506,6 @@ void delete(Dictionary D, KEY_TYPE k) {
 
   //see if the node exists
   Node z = TreeSearch(D->root, k);
-
   //see if cursor deleted
   if(z == D->cursor) {
     D->cursor = D->nill;
@@ -557,7 +559,9 @@ void makeEmpty(Dictionary D) {
     exit(1);
   }
   //take out all the nodes
-  postOrderDelete(D,D->root);
+  while(D->size > 0) {
+    postOrderDelete(D,D->root);
+  }
   D->cursor = D->nill;
 }
 
@@ -654,14 +658,13 @@ void printDictionary(FILE* out, Dictionary D, const char * ord) {
     exit(1);
   }
   if (strcmp(ord,"pre") == 0) {
-
+    preOrderTreeWalk(out, D->root);
   }
   else if (strcmp(ord, "post") == 0) {
-
+    postOrderTreeWalk(out, D->root);
   }
   else if ( strcmp(ord,"in") == 0) {
     inOrderTreeWalk(out, D->root);
   }
   //else do nothing
 }
-
