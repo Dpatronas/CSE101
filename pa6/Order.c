@@ -89,19 +89,19 @@ int main(int argc, char* argv[]){
   
   printDictionary(out, D, "pre");
    
-  fprintf(out,"\n******************************************************");
+  fprintf(out,"\n\n******************************************************");
   fprintf(out,"\nIN-ORDER:");
   fprintf(out,"\n******************************************************\n");
   
   printDictionary(out, D, "in");
 
-    fprintf(out,"\n******************************************************");
+    fprintf(out,"\n\n******************************************************");
   fprintf(out,"\nPOST-ORDER:");
   fprintf(out,"\n******************************************************\n");
   
   printDictionary(out, D, "post");
 
-
+  fprintf(out, "\n\n");
    // free resources
    freeDictionary(&D);
    for(i=0; i<n; i++){

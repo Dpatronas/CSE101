@@ -117,7 +117,7 @@ int getUnique(Dictionary D) {
 // Helper for lookup operations or delete
 Node TreeSearch(Node x, KEY_TYPE k) {
   //returns key rooted at x or NULL
-  if( x->data == VAL_UNDEF || k == x->key ) {
+  if( x->data == VAL_UNDEF || KEY_CMP(k,x->key) == 0 ) {
     return x;
   }
   //go down the left subtree to search for rooted node with k
@@ -376,7 +376,6 @@ void insert(Dictionary D, KEY_TYPE k, VAL_TYPE v) {
   if (D->unique == 0 || lookup(D,k) == VAL_UNDEF) {
 
     Node nn = newNode(k, v); //using pointer data  
-    
     nn->left = nn->right = D->nill;
     
     Node y = D->nill;
