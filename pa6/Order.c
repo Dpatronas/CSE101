@@ -77,6 +77,15 @@ int main(int argc, char* argv[]){
 
          }else{ // this word has been seen already
             (*p)++;
+            keyBuffer = realloc(keyBuffer, n*sizeof(KEY_TYPE));
+            keyBuffer[n-1] = calloc(strlen(word)+1, sizeof(char));
+            strcpy(keyBuffer[n-1], word);
+
+            valBuffer = realloc(valBuffer, n*sizeof(VAL_TYPE));
+            valBuffer[n-1] = malloc(sizeof(int));
+            *valBuffer[n-1] = 1;
+
+            insert( D, keyBuffer[n-1], valBuffer[n-1] );
          }
 
          // get next token
