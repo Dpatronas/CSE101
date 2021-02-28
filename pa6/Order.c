@@ -8,122 +8,119 @@
 // Usage: Order <input file> <output file>
 //
 //-----------------------------------------------------------------------------
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
 #include"Dictionary.h"
 
-#define MAX_LINE_LEN 300
+#define MAX_LEN 300
 
 
 int main(int argc, char* argv[]){
 
-   Dictionary D = newDictionary(0); // unique keys
-   FILE* in = NULL;
-   FILE* out = NULL;
-   char delim[] = "\x20\n\t\r\\\"\',<.>/?;:[{]}|`~!@#$^&*()-_=+0123456789"\
-                  "\xE2\x80\x98\x94\x99\x9C\x9D\x25";
-   char line[MAX_LINE_LEN];
-   char** keyBuffer = NULL;
-   int**  valBuffer = NULL;
-   char* word;
-   char* ch;
-   int* p;
-   int i, n=0;
+  Dictionary D = newDictionary(0); // unique keys
+  FILE* in = NULL;
+  FILE* out = NULL;
+  int token_count;
+  int line_count = 1;
+  char line[MAX_LEN];
+  char tokenBuffer[MAX_LEN];
+  char* token;
+  int i = 0;
 
-   // check command line arguments 
-   if( argc != 3 ){
-      printf("Usage: %s <input file> <output file>\n", argv[0]);
-      exit(EXIT_FAILURE);
-   }
 
-   // open input file 
-   in = fopen(argv[1], "r");
-      if( in==NULL ){
-      printf("Unable to open file %s for reading\n", argv[1]);
-      exit(1);
-   }
+  // check command line arguments 
+  if( argc != 3 ){
+    printf("Usage: %s <input file> <output file>\n", argv[0]);
+    exit(EXIT_FAILURE);
+  }
 
-   // open output file
-   out = fopen(argv[2], "w");
-   if( out==NULL ){
-      printf("Unable to open file %s for writing\n", argv[2]);
-      exit(1);
-   }
+  // open input file 
+  in = fopen(argv[1], "r");
+    if( in==NULL ){
+    printf("Unable to open file %s for reading\n", argv[1]);
+    exit(1);
+  }
 
-   // read each line of input 
-   while( fgets(line, MAX_LINE_LEN, in) != NULL)  {
-      
-      // get each word on this line
-      word = strtok(line, delim);
-      while( word!=NULL ){ // there is another word
-         
-         // convert word to lower case
-         for(ch=word; *ch!='\0'; ch++){
-            *ch = tolower(*ch);
-         }
+  // open output file
+  out = fopen(argv[2], "w");
+  if( out==NULL ){
+    printf("Unable to open file %s for writing\n", argv[2]);
+    exit(1);
+  }
 
-         p = lookup(D, word);
-         if( p==VAL_UNDEF ){ // this word is new
-            n++;
+  // read the lines in input file
+  do {
+    int read_char = fgetc(in);
+    if(read_char == '\n') {
+      line_count++;
+    }
+  } while(!feof(in));
 
-            keyBuffer = realloc(keyBuffer, n*sizeof(KEY_TYPE));
-            keyBuffer[n-1] = calloc(strlen(word)+1, sizeof(char));
-            strcpy(keyBuffer[n-1], word);
+  //reset the file pointer
+  rewind(in);
 
-            valBuffer = realloc(valBuffer, n*sizeof(VAL_TYPE));
-            valBuffer[n-1] = malloc(sizeof(int));
-            *valBuffer[n-1] = 1;
+  //array to hold the strings
+  char *tok_arr[line_count];
 
-            insert( D, keyBuffer[n-1], valBuffer[n-1] );
+  while( fgets(line, MAX_LEN, in) != NULL)  {
 
-         }else{ // this word has been seen already
-            (*p)++;
-            keyBuffer = realloc(keyBuffer, n*sizeof(KEY_TYPE));
-            keyBuffer[n-1] = calloc(strlen(word)+1, sizeof(char));
-            strcpy(keyBuffer[n-1], word);
+    // get tokens in this line
+    token_count = 0;
+    tokenBuffer[0] = '\0';
 
-            valBuffer = realloc(valBuffer, n*sizeof(VAL_TYPE));
-            valBuffer[n-1] = malloc(sizeof(int));
-            *valBuffer[n-1] = 1;
+    // get first token
+    token = strtok(line, " \n");
 
-            insert( D, keyBuffer[n-1], valBuffer[n-1] );
-         }
+    while( token!=NULL ){ // we have a token
+      // update token buffer
+      strcat(tokenBuffer, token);
+      strcat(tokenBuffer, " ");
+      token_count++;
 
-         // get next token
-         word = strtok(NULL, delim);
-      }
-   }
+      // get next token
+      token = strtok(NULL, " \n");
+    }
+    //allocate space for each string as an element of the array
+    tok_arr[i] = strcpy(malloc(strlen(tokenBuffer) +1),tokenBuffer);
+    i++;
+  }
+  int p = 1;
+  int *ptr = &p;
+
+  for(i = 0; i < line_count-1; i++) {
+    insert( D, tok_arr[i], ++ptr );
+  }
+
   fprintf(out,"******************************************************");
   fprintf(out,"\nPRE-ORDER:");
   fprintf(out,"\n******************************************************\n");
-  
+
   printDictionary(out, D, "pre");
-   
+
   fprintf(out,"\n\n******************************************************");
   fprintf(out,"\nIN-ORDER:");
   fprintf(out,"\n******************************************************\n");
-  
+
   printDictionary(out, D, "in");
 
-    fprintf(out,"\n\n******************************************************");
+  fprintf(out,"\n\n******************************************************");
   fprintf(out,"\nPOST-ORDER:");
   fprintf(out,"\n******************************************************\n");
-  
+
   printDictionary(out, D, "post");
 
   fprintf(out, "\n\n");
-   // free resources
-   freeDictionary(&D);
-   for(i=0; i<n; i++){
-      free(keyBuffer[i]);
-      free(valBuffer[i]);
-   }
-   free(keyBuffer);
-   free(valBuffer);
-   fclose(in);
-   fclose(out);
 
-   return(0);
+  // free resources
+  freeDictionary(&D);
+
+  token = NULL;
+  ptr = NULL;
+  fclose(in);
+  fclose(out);
+
+  return(0);
 }
