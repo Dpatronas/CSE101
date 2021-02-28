@@ -1,8 +1,11 @@
 //-----------------------------------------------------------------------------
-// WordFrequency.c
+// Despina Patronas, Dpatrona
+// 2021 Winter CSE 101 pa6
+//
+// Order.c
 // Determines frequency of each word in a file.
 //
-// Usage:  WordFrequency <input file> <output file>
+// Usage: Order <input file> <output file>
 //
 //-----------------------------------------------------------------------------
 #include<stdio.h>

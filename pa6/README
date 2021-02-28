@@ -1,0 +1,75 @@
+/*********************************************************************************
+* Despina Patronas, Dpatrona
+* 2021 Winter CSE 101 pa6
+	README
+*********************************************************************************/
+
+	Dictionary.h
+		Includes the definitions of structures and prototypes for a Dictionary ADT
+		Dictionary ADT is a RBT BST that stores (key, value) pairs of types KEY_TYPE and VAL_TYPE.
+	
+	Dictionary.c
+		Implementation of Dictionary.h
+
+	DictionaryTest.c
+		Tests the Dictionary.c ADT functions including:
+
+			-Creation of default Dictionary fields are correct
+
+			-Extremities of the tree are populated by a nill node
+
+			-Cursor position and functions behaves correctly for: 
+				-default Dictionary and non empty Dictionary as intended for iterations.
+				-Cursor will return proper keys for the element it is currently pointing to
+
+				-(Next) and (Prev) changes cursor position and pointer nodes to left and right
+					-returns the new cursor nodes data value
+					-otherwise if cursor becomes undefined or was not defined to begin with returns VAL_UNDEF
+
+				-(beginForward) will set the cursor to the trees minimum and return that elements data value
+					-will return VAL_UNDEF if there is no elements in the tree
+
+				-(beginReverse) will set the cursor to the trees maximum and return that elements data value
+					-will return VAL_UNDEF if there is no elements in the tree
+
+			-lookup in the Dictionary will find a key and return the value otherwise returns VAL_UNDEF
+				uses the treeSearch helper function
+
+			-Unique will determine whether duplicates are allowed to be inserted or not
+
+			-Insert considers case where tree is empty, and traverses tree for the proper insertion
+
+			-Delete considers all cases in the tree (leaf, middle, root)
+
+			-makeEmpty sets BST to default state
+				-uses delete which uses postorderdelete helper
+
+			-Deconstructor removes the dictionary
+
+				*NOTE: note prints to console shell. no input / output file needed
+
+	WordFrequency.c
+			Takes an input from a file
+			Populates RBT with words as keys (read in line)
+			Prints the word frequency of each key
+
+	Order.c
+		IO operations
+			Reads an input file line by line
+			Inserts words in the RBT BST ADT
+			Prints the in order, pre order, and post order representations of the tree
+			Counts the frequency of words inputted as keys into the tree
+			
+			Example:
+				$./Order in.txt out.txt
+
+	Makefile
+		make Order 	 			makes Order executable
+		make WordFrequency 		makes WordFrequency executable
+		make clean 				removes all binaries
+		make check1 			tests WordFrequency for memory leaks
+		make check2 			tests Order for memory leaks
+
+	Usage:
+		$./Order <in.txt> <out.txt>
+		$./WordFrequency <in.txt> <out.txt>
