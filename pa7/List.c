@@ -70,7 +70,7 @@ LIST_ELEMENT length(List L) {
 }
 
 // Returns int index of cursor element. may returns -1 (undefined).
-LIST_ELEMENT index(List L) {
+LIST_ELEMENT index1(List L) {
   return L->index;
 }
 
@@ -257,10 +257,9 @@ void insertBefore(List L, LIST_ELEMENT x) {
       return;
     }
   }
-  else {
-    printf("The cursor is not defined");
-    exit(1);
-  }
+  // else {
+  //   printf("\nThe cursor is not defined");
+  // }
 }
 
 // Insert new element after cursor.
@@ -286,10 +285,6 @@ void insertAfter(List L, LIST_ELEMENT x) {
     else {
       append(L,x);
     }
-  }
-  else {
-    printf("The cursor is not defined");
-    exit(1);
   }
 }
 
@@ -393,7 +388,6 @@ void delete(List L) {
       return;
     }
   }
-  printf("There is no cursor defined; cannot delete NDF cursor!");
 }
 
 // EXTRA FUNCTIONS________________________________________________________________
@@ -408,7 +402,7 @@ void printList(FILE* out, List L) {
   }
   Node temp = L->front;
   while(temp) {
-    fprintf(out, "%d ", temp->data);
+    fprintf(out, "%ld ", temp->data);
     temp = temp->next;
   }
 }
