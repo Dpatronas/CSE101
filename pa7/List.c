@@ -70,7 +70,7 @@ LIST_ELEMENT length(List L) {
 }
 
 // Returns int index of cursor element. may returns -1 (undefined).
-LIST_ELEMENT index1(List L) {
+LIST_ELEMENT index(List L) {
   return L->index;
 }
 

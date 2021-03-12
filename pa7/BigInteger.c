@@ -32,7 +32,7 @@ BigInteger newBigInteger() {
   if (!B) 
     exit(1);
   B->sign = 0;
-  List mag = newList();
+  // List mag = newList();
   return B;
 }
 
