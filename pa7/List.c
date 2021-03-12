@@ -104,6 +104,28 @@ LIST_ELEMENT get(List L) {
   return -1;
 }
 
+// Returns true (1) iff Lists A and B are in same state, otherwise returns false (0)
+int listEQ(List A, List B) {
+
+  //default false
+  int ret = 0;
+  Node N = NULL;
+  Node M = NULL;
+  
+  //set ret by checking length match first
+  ret = ( A->length == B->length );
+  N = A->front;
+  M = B->front;
+
+  //compares data values updating ret value for entire list
+  while ( ret && N ) {
+    ret = (N->data == M->data);
+    N = N->next;
+    M = M->next;
+  }
+  return ret;
+}
+
 // MANIPULATE FUNCTIONS=============================================================
 
 // Resets L to its original empty state.

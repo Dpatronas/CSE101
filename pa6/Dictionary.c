@@ -54,13 +54,6 @@ Node newNode (KEY_TYPE key, VAL_TYPE data) {
   return (N);
 }
 
-void freeNode (Dictionary D, Node * pN) {
-  if (pN && *pN) {
-    memset(*pN, 0, sizeof(NodeObj));
-    pN = NULL;
-  }
-}
-
 typedef struct DictionaryObj {
   Node nill;    //ptr to all nill ends of the tree
   Node root;    //ptr to the start of the tree
@@ -191,7 +184,6 @@ void postOrderDelete(Dictionary D, Node x) {
     postOrderDelete(D,x->left);
     postOrderDelete(D,x->right);
     delete(D,x->key);
-    freeNode(D, &x);
   }
 }
 

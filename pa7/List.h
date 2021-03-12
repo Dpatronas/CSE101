@@ -60,6 +60,8 @@ LIST_ELEMENT back(List L);
 // Pre: length()>0, index()>=0
 LIST_ELEMENT get(List L);
 
+int listEQ(List A, List B);
+
 //Resets L to its original empty state.
 void clear(List L);
 
