@@ -36,20 +36,14 @@ int main(int argc, char * argv[]) {
     exit(1);
   }
 
-
-  BigInteger A; 
-  BigInteger B;
-  BigInteger S; 
-  BigInteger P; 
-  BigInteger Z;
-
 //input the first Big Int
 //=================================================
 
   fscanf(in, "%d\n", &len);
   char str[len+1];
   fscanf(in, "%s\n", str );
-  A = stringToBigInteger(str);
+  BigInteger A = stringToBigInteger(str);
+
   printBigInteger(out, A); fprintf(out, "\n\n");
   
 //input the second Big Int
@@ -58,12 +52,13 @@ int main(int argc, char * argv[]) {
   fscanf(in, "%d\n", &len);
   char str2[len+1];
   fscanf(in, "%s\n", str2 );
-  B = stringToBigInteger(str2);
+  BigInteger B = stringToBigInteger(str2);
 
   printBigInteger(out, B); fprintf(out, "\n\n");
 
 // Arithmetic
 //=================================================
+  BigInteger S; BigInteger P; BigInteger Z;
 
   //A+B
   S = sum(A,B);  
@@ -94,19 +89,19 @@ int main(int argc, char * argv[]) {
   P = prod(A,B);    
   printBigInteger(out, P); fprintf(out, "\n\n");
 
-  Z = prod(A,A);      // A*A = A^2
-  printBigInteger(out, Z); fprintf(out, "\n\n");
+  // Z = prod(A,A);      // A*A = A^2
+  // printBigInteger(out, Z); fprintf(out, "\n\n");
 
-  P = prod(B,B);      // B*B = B^2
-  printBigInteger(out, P); fprintf(out, "\n\n");
+  // P = prod(B,B);      // B*B = B^2
+  // printBigInteger(out, P); fprintf(out, "\n\n");
 
-  Z = prod(Z,Z);      // A^2*A^2 = A^4
-  Z = prod(Nine,Z);   // 9A^4
-  printBigInteger(out, Z); fprintf(out, "\n\n");
+  // Z = prod(Z,Z);      // A^2*A^2 = A^4
+  // Z = prod(Nine,Z);   // 9A^4
+  // printBigInteger(out, Z); fprintf(out, "\n\n");
 
-  P = prod(P,P);      //B^2*B^2 = B^4
-  P = prod(P,B);      //B^4*B   = B^5
-  S = sum(Z,P);
+  // P = prod(P,P);      //B^2*B^2 = B^4
+  // P = prod(P,B);      //B^4*B   = B^5
+  // S = sum(Z,P);
 
   freeBigInteger(&A);
   freeBigInteger(&B);
@@ -115,11 +110,11 @@ int main(int argc, char * argv[]) {
   freeBigInteger(&Z);
   freeBigInteger(&Two  );
   freeBigInteger(&Three);
-  freeBigInteger(&Nine );
-  freeBigInteger(&SixT );
+  // freeBigInteger(&Nine );
+  // freeBigInteger(&SixT );
 
   fclose(in);
   fclose(out);
-
+  
   return 0;
 }
