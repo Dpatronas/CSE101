@@ -163,7 +163,7 @@ int stringData(int len, char *s, int sign) {
 // Cut string end by adding null in increments of power
 // Used in stringToBigInteger reading in each element in the list
 void cut_String(char *str) {
-  for (int i = strlen(str)-POWER; i < strlen(str); i++) {
+  for (int i = (int)strlen(str)-POWER; i < strlen(str); i++) {
     str[i] = '\0';
   }
 }
@@ -189,7 +189,7 @@ BigInteger stringToBigInteger(char* s) {
   B->sign = stringData(len,str, 0);
 
   //prepend the list by elements in the power
-  for (int i = strlen(str); i >= 0; i-= POWER) {
+  for (int i = (int)strlen(str); i >= 0; i-= POWER) {
 
     //ignore NULL chars
     if ( str[i] == '\0' )
@@ -209,7 +209,7 @@ BigInteger stringToBigInteger(char* s) {
   char last[strlen(str)];
 
   if ( strlen(str) > 0 ) {
-    for (int j = 0; j < strlen(str); j++)
+    for (int j = 0; j < (int)strlen(str); j++)
       last[j] = str[j];
 
     int long elem = atol(last);
@@ -329,7 +329,6 @@ void add(BigInteger S, BigInteger A, BigInteger B) {
   if (A->sign == 0) {//A is an empty set
     S->mag = B->mag; S->sign = B->sign;
   }
-  
   else if (B->sign == 0) {//B is an empty set
     S->mag = A->mag; S->sign = A->sign;
   }
@@ -356,17 +355,30 @@ BigInteger sum(BigInteger A, BigInteger B) {
   moveBack(A->mag); moveBack(B->mag);
   List L = newList();  //list to return
   BigInteger newBigInt = newBigInteger();
+  int first = 0; int second = 0; 
+  int len = A->mag->length; //assume equal length
 
-  if (listEQ(A->mag, B->mag)) {
-    newBigInt->sign = 0;
-    newBigInt->mag = L;
-    return newBigInt;
+  //set larger length
+  if (A->mag->length > B->mag->length) {
+    len = A->mag->length;
+  }
+  else {
+    len = B->mag->length;
   }
 
   //same sign case -A + -B || A + B
   if (A->sign == B->sign) {
-    for (int i = 0; i < A->mag->length; i++) {
-      long sum = get(A->mag) + get(B->mag);
+    for (int i = 0; i < len; i++) {
+
+      first = get(A->mag);
+      second = get(B->mag);
+
+      if (first == -1) 
+        first = 0;
+      if (second == -1)
+        second = 0;
+
+      long sum = first + second;
       prepend(L, sum);
 
       //if A + B = A + A (same list) movePrev only once
@@ -375,24 +387,42 @@ BigInteger sum(BigInteger A, BigInteger B) {
       } 
       movePrev(A->mag); movePrev(B->mag); //otherwise move both
     }
-    newBigInt->mag = L;           //vector addition
+    newBigInt->mag = L;
 
     //positive sign case
     if ( (A->sign == 1 && B->sign == 1) ) {
       newBigInt->sign = 1;
       normalize(newBigInt, 'a');  //normalize + vector
+      return newBigInt;
     }
     //negative sign case
     else if(A->sign == -1 && B->sign == -1){
       newBigInt->sign = -1;
       normalize(newBigInt, 's');  //normalize - vector
+      return newBigInt;
     }
   }
 
   //opposite signs case A + -B = (A - B)
   else if (A->sign == 1 && B->sign == -1) {
-    for (int i = 0; i < A->mag->length; i++) {
-      long diff = get(A->mag) - get(B->mag);
+
+    if (listEQ(A->mag, B->mag)) { //equal
+      newBigInt->sign = 0;
+      newBigInt->mag = L;
+      return newBigInt;
+    }
+
+    for (int i = 0; i < len; i++) {
+
+      first = get(A->mag);
+      second = get(B->mag);
+
+      if (first == -1) 
+        first = 0;
+      if (second == -1)
+        second = 0;      
+
+      long diff = first - second;
       prepend(L,diff);
 
       //if A + B = A + A (same list) movePrev only once
@@ -415,8 +445,17 @@ BigInteger sum(BigInteger A, BigInteger B) {
 
   //opposite signs case -A + B = (B - A)
   else {
-    for (int i = 0; i < A->mag->length; i++) {
-      long diff = get(B->mag) - get(A->mag);
+    for (int i = 0; i < len; i++) {
+
+      first = get(A->mag);
+      second = get(B->mag);
+
+      if (first == -1) 
+        first = 0;
+      if (second == -1)
+        second = 0;
+
+      long diff = first - second;
       prepend(L,diff);
 
       //if A + B = A + A (same list) movePrev only once
@@ -476,17 +515,29 @@ BigInteger diff(BigInteger A, BigInteger B) {
   List L = newList();
   BigInteger newBigInt = newBigInteger();
   moveBack(A->mag); moveBack(B->mag);
+  int first = 0; int second = 0; 
+  int len = A->mag->length; //assume equal length
 
-  if (listEQ(A->mag, B->mag)) {
-    newBigInt->sign = 0;
-    newBigInt->mag = L;
-    return newBigInt;
+  if (A->mag->length > B->mag->length) {  //set larger length
+    len = A->mag->length;
+  }
+  else {
+    len = B->mag->length;
   }
 
-  // Addition
-  else if ((A->sign == 1 && B->sign == -1) || (A->sign == -1 && B->sign == 1)) {
-    for (int i = 0; i < A->mag->length; i++) {
-      long sum = get(A->mag) + get(B->mag);
+  // Addition A -- B || B -- A
+  if ((A->sign == 1 && B->sign == -1) || (A->sign == -1 && B->sign == 1)) {
+    for (int i = 0; i < len; i++) {
+      
+      first = get(A->mag);
+      second = get(B->mag);
+
+      if (first == -1) 
+        first = 0;
+      if (second == -1)
+        second = 0;
+
+      long sum = first + second;
       prepend(L, sum);
 
       if(A->mag == B->mag) {
@@ -508,11 +559,27 @@ BigInteger diff(BigInteger A, BigInteger B) {
     return newBigInt;
   }
   
-  // Subtration
-  // If +A - +B
+  // Subtration If +A - +B
   else if (A->sign == 1 && B->sign == 1) {
-    for (int i = 0; i < A->mag->length; i++) {
-      long diff = get(A->mag) - get(B->mag);
+
+    //empty case
+    if (listEQ(A->mag, B->mag)) {
+      newBigInt->sign = 0;
+      newBigInt->mag = L;
+      return newBigInt;
+    }
+
+    for (int i = 0; i < len; i++) {
+
+      first = get(A->mag);
+      second = get(B->mag);
+
+      if (first == -1) 
+        first = 0;
+      if (second == -1)
+        second = 0;
+
+      long diff = first - second;
       prepend(L,diff);
 
       if(A->mag == B->mag) {
@@ -531,10 +598,24 @@ BigInteger diff(BigInteger A, BigInteger B) {
     return newBigInt;
   }
 
-  // subtraction
-  // if +B - +A = -A + B
-  for (int i = 0; i < A->mag->length; i++) {
-    long diff = get(B->mag) - get(A->mag);
+  // subtraction if +B - +A = -A + B
+  for (int i = 0; i < len; i++) {
+    //empty case
+    if (listEQ(A->mag, B->mag)) {
+      newBigInt->sign = 0;
+      newBigInt->mag = L;
+      return newBigInt;
+    }
+
+    first = get(A->mag);
+    second = get(B->mag);
+
+    if (first == -1) 
+      first = 0;
+    if (second == -1)
+      second = 0;
+
+    long diff = first - second;
     prepend(L,diff);
 
     if(A->mag == B->mag) {
@@ -567,9 +648,15 @@ BigInteger prod(BigInteger A, BigInteger B);
 // printBigInteger() 
 // Prints a base 10 string representation of N to filestream out. 
 void printBigInteger(FILE* out, BigInteger N) {
-  if (!N->mag || !N || !out) {
+
+  if ( !N || !out ) {
     exit(1);
   }
+
+  if (N->sign == 0) {
+    printf("\nempty"); return;
+  }
+
   //print the zero
   if (N->sign == -1) {
     fprintf(out, "-");
@@ -583,9 +670,4 @@ void printBigInteger(FILE* out, BigInteger N) {
     fprintf(out, "%0*ld", POWER, temp->data);
     temp = temp->next;
   }
-
-  printf("\nList: ");
-  printList(out, N->mag);
-  printf("\n");
-
 }
