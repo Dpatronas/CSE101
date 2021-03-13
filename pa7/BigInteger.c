@@ -95,6 +95,9 @@ int equals(BigInteger A, BigInteger B) {
   if (!A || !B)
     exit(1);
 
+  if (A->sign == 0 && B->sign == 0)
+    return 1;
+
   //first check the length and sign matches
   if ( (A->mag->length != B->mag->length) || (A->sign != B->sign)) 
     return 0;
@@ -195,9 +198,9 @@ BigInteger stringToBigInteger(char* s) {
     if ( str[i] == '\0' )
       continue;
 
-    //grab the element to append. 
-    //Make elem positive if negative and 
-    int long elem = atol(str + i );
+    //grab the element to append. Make elem positive if negative
+    int long elem = atol(str + i );  
+    // printf("\nelem: %ld\n", elem);
     if (elem < 0) 
       elem *= -1;
     
@@ -213,15 +216,10 @@ BigInteger stringToBigInteger(char* s) {
       last[j] = str[j];
 
     int long elem = atol(last);
+    // printf("\nlast elem: %ld\n", elem);
 
     if (elem < 0)
       elem *= -1;
-
-    //ignore trailing 0
-    if (elem == 0) {
-      B->mag = L;
-      return B;
-    }
 
     prepend(L,elem);
   }
@@ -452,8 +450,8 @@ BigInteger sum(BigInteger A, BigInteger B) {
   else {
     for (int i = 0; i < len; i++) {
 
-      first = get(B->mag);
-      second = get(A->mag);
+      first = get(A->mag);
+      second = get(B->mag);
 
       if (first == -1) 
         first = 0;
@@ -470,10 +468,10 @@ BigInteger sum(BigInteger A, BigInteger B) {
       //otherwise move each respective list once
       movePrev(A->mag); movePrev(B->mag);
     }
-    if (compare(A, B) > 0) {      //A > -B = negative
+    if (compare(A, B) > 0) {      //+A < -B = negative
       newBigInt->sign = -1;
     }
-    else if (compare(A, B) < 0) { //A < -B = positive
+    else if (compare(A, B) < 0) { //+A > -B = positive
       newBigInt->sign = 1;
     }
     //set the List
@@ -644,15 +642,14 @@ BigInteger diff(BigInteger A, BigInteger B) {
 // Places the product of A and B in the existing BigInteger P, overwriting  
 // its current state:  P = A*B 
 void multiply(BigInteger P, BigInteger A, BigInteger B) {
-  return;
+
+  List L = newList();
+
 }
 
 // prod() 
 // Returns a reference to a new BigInteger object representing A*B 
-BigInteger prod(BigInteger A, BigInteger B) {
-  BigInteger N = newBigInteger();
-  return N;
-}
+BigInteger prod(BigInteger A, BigInteger B);
 
 // Other operations ----------------------------------------------------------- 
 // printBigInteger() 
@@ -664,19 +661,15 @@ void printBigInteger(FILE* out, BigInteger N) {
   }
 
   if (N->sign == 0) {
-    fprintf(out,"0"); return;
+    printf("\nempty"); return;
   }
 
   //print the zero
   if (N->sign == -1) {
     fprintf(out, "-");
   }
-
-  //get rid of trailing 0's or elements that are 0
+  //print first element without 0 in front
   Node temp = N->mag->front;
-  while (temp->data == 0) {
-    temp = temp->next;
-  }
   fprintf(out, "%ld",temp->data);
   temp = temp->next;
 
