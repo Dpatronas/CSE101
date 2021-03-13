@@ -1,0 +1,73 @@
+/*********************************************************************************
+* Despina Patronas, Dpatrona
+* 2021 Winter CSE 101 pa7
+	README
+*********************************************************************************/
+
+	BigInteger.h
+		Includes the definitions of structures and prototypes for a BigInteger ADT
+	
+	BigInteger.c
+		Implementation of BigInteger ADT
+
+	BigIntegerTest.c
+		Tests the BigInteger ADT functions including:
+
+			-Creation of default BigInteger fields are correct
+			- 7 Sign cases for Add
+			- 7 Sign cases for Sum
+			- 7 Sign cases for Diff
+			- 7 Sign cases for Subtract
+			- Sign cases for Multiply
+			- Sign cases for Product
+			- Equals works appropriately
+			- Carries work for Add / Sum and Subtract / Diff
+			- Negate takes the inverse sign of BigInt
+			- MakeZero empties the BigInt
+
+	List.h
+		public file including the definitions of structures and the prototypes
+	
+	List.c
+		implementation of list.h AKA the linked list ADT
+
+	ListTest.c
+		Tests the List.c ADT functions including:
+
+			-Creation of default lists fields are correct
+			-append and prepend on a default / filled list inserts nodes correctly relative to current cursor index
+			-InsertBefore and insertAfter on a default / filled list inserts nodes correctly relative to current cursor index
+			-MoveNext and MovePrev changes index position
+				-will not move out of bounds instead just returns -1
+			-MoveFront / MoveBack move index to respective nodes in List (accounts for empty list
+			-Index returns the current Node pointed to
+			-delete sets cursor index to 0
+			-deleteFront and deleteBack removes the front and back elements if index is valid
+			-Clear sets list to default
+			-Set will replace data element of index node if valid
+			-Checks concat properly joins lists and set position to 0 and fields appropriately
+			-listEQ checks if two lists are equal to each other
+
+				*NOTE: note prints to console shell. no input / output file needed
+
+	Arithmetic.c
+		IO operations
+			Reads 4 lines of an input file
+			Creates 2 BigIntegers with string input on line 2 and 3
+
+			Prints the BigInteger & Does Calculations on BigIntegers:
+			 𝐴, 𝐵, 𝐴+𝐵, 𝐴 −𝐵, 𝐴 −𝐴, 3𝐴−2𝐵, 𝐴𝐵, 𝐴2, 𝐵2, 9𝐴4+16𝐵5
+			
+			Example:
+				$./Arithmetic in.txt out.txt
+
+	Makefile
+		make Arithmetic 	 	makes Arithmetic executable
+		make ListTest.c 		makes ListTest executable
+		make BigIntegerTest.c 	makes BigIntegerTest executable
+		make clean 				removes all binaries
+		make memcheck 			checks memory leaks in valgrind *Theres a lot! -n-
+
+	Usage:
+		$./Arithmetic <in.txt> <out.txt>
+

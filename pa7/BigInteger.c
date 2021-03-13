@@ -643,18 +643,136 @@ BigInteger diff(BigInteger A, BigInteger B) {
   return newBigInt;
 }
 
+//normalize a vector after multiplication occured
+int mult_norm(BigInteger N, int scal) {
+
+  // if (N->sign == 0) //if empty
+  //   return 0;
+
+  moveBack(N->mag);
+  long carry = 0;   //keep track of carries
+  int ret = 1;     //default sign
+  long elem = 0;
+
+  for (int i = 0; i < N->mag->length; i++) {
+
+    elem = get(N->mag);        //EX: 1330 in base 2
+
+    if (carry != 0) { 
+      elem +=  carry; //if there is a carry from previous, add now
+      set(N->mag, elem);
+    }
+
+    //if the digit is over its range
+    if ( (elem / BASE) >= 1 ) {       //EX: 1330 / 10^2 = 13.3
+      carry = floor(elem / BASE);     // carry = 13 (floor)
+      long sub = (carry*BASE);
+      long sets = elem - sub;         // 1330 - 13*10^2 = 30
+      set(N->mag, sets);
+    }
+    else {
+      carry = 0;//digit is in range, no carry needed for next iteration
+    }
+    movePrev(N->mag);
+  }
+
+  if (carry != 0) { //if there is a carry after the addition prepend it
+    prepend(N->mag, carry);
+  }
+  return ret;
+}
+
+//returns a new bigInteger with product values
+BigInteger Scal(BigInteger A, int scal ) {
+
+  if (!A || A->sign == 0)
+    exit(1);
+
+  BigInteger newB = newBigInteger();
+
+  if (scal == 0) { //0 * bigint = 0
+    makeZero(A);
+  }
+
+  else {
+    List L = newList();       // new list to hold mult vector
+    int len = A->mag->length; // number of times to multiply scalar by
+    moveBack(A->mag);         
+
+    //for each element in A multiply the scalar
+    for (int i = 0; i < len; i++) {
+      long prod = get(A->mag) * scal;
+      prepend(L, prod);
+      movePrev(A->mag);
+    }    
+    
+    //normalize the resulting vector
+    moveBack(A->mag); //move A back into position
+    newB->mag = L;
+    newB->sign = mult_norm(newB, scal);
+  }
+  return newB;
+}
+
 // multiply() 
 // Places the product of A and B in the existing BigInteger P, overwriting  
 // its current state:  P = A*B 
 void multiply(BigInteger P, BigInteger A, BigInteger B) {
-  return;
+  P->mag = prod(A,B)->mag;
+  P->sign = prod(A,B)->sign;
 }
 
 // prod() 
 // Returns a reference to a new BigInteger object representing A*B 
 BigInteger prod(BigInteger A, BigInteger B) {
-  BigInteger N = newBigInteger();
-  return N;
+
+  BigInteger Total = newBigInteger(); //Hold the running total  of vectors. 
+
+  if (A->sign == 0 || B->sign == 0) {
+    return Total;
+  }
+
+  BigInteger F = newBigInteger();     //"first" big int
+  BigInteger S = newBigInteger();     //"second" big int
+
+  moveBack(A->mag);
+  moveBack(B->mag);
+  long scalar = 0;
+  
+  //scalar multiplication const*B
+  if (A->mag->length == 1) {
+    scalar = get(A->mag);
+    Total = Scal(B, scalar);
+  }
+  //scalar multiplication const*A
+  else if (B->mag->length == 1) {
+    scalar = get(B->mag);
+    Total = Scal(A,scalar);
+  }
+
+  else {
+    for (int i = 0; i < A->mag->length; i++) {
+
+      scalar = get(B->mag);           //starts at the end of the list
+      F = Scal(A,scalar);             //N = vector A x B
+      
+      for (int j = 0; j < i; j++) {
+        append(F->mag,0);             //add the zeros to each scalar
+      }
+      //get the next elements vector
+      movePrev(B->mag);
+
+      //i is odd, adds two new vectors at a time
+      if ( (i != 0) && (i % 1 == 0) ) {
+        add(Total,S,F); //add up the normalized bigints S and F
+      }
+      S = F;                        //save the bigint we just made
+    }
+  }
+  if (A->sign != B->sign) {
+    Total->sign = -1;
+  }
+  return Total;
 }
 
 // Other operations ----------------------------------------------------------- 
@@ -662,19 +780,17 @@ BigInteger prod(BigInteger A, BigInteger B) {
 // Prints a base 10 string representation of N to filestream out. 
 void printBigInteger(FILE* out, BigInteger N) {
 
-  if ( !N || !out ) {
+  if ( !N || !out ) 
     exit(1);
-  }
-
+  
   if (N->sign == 0) {
-    fprintf(out,"0"); return;
+    fprintf(out,"0"); 
+    return;
   }
-
   //print the zero
-  if (N->sign == -1) {
+  if (N->sign == -1) 
     fprintf(out, "-");
-  }
-
+  
   //get rid of trailing 0's or elements that are 0
   Node temp = N->mag->front;
   while (temp->data == 0) {

@@ -196,7 +196,7 @@ int main () {
   printBigInteger(stdout, E);
   printf("\n");
 
-   printf("\n=========================================================");
+  printf("\n=========================================================");
   printf("\n (DIFF A - -B) where A == B" );
   printf("\n=========================================================");
 
@@ -210,6 +210,24 @@ int main () {
 
   E = diff(A, B);
   printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+    printf("\n=========================================================");
+  printf("\n (DIFF -A - -B)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-12345");
+  B = stringToBigInteger("-12345");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  E = diff(A, B);
+  printf("\nE = ");
   printBigInteger(stdout, E);
   printf("\n");
 
@@ -230,6 +248,187 @@ int main () {
   printf("\nS = ");
   printBigInteger(stdout, S);
   printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n (SUB -A - B) " );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-54321");
+  B = stringToBigInteger("54321");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  subtract(E,A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n (SUB -A - B) where A == B" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-54321");
+  B = stringToBigInteger("54321");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  subtract(E,A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n (SUB -A - B) (with a carry)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-99999");
+  B = stringToBigInteger("99999");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  subtract(E,A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n Check Multiply (negative)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-123");
+  B = stringToBigInteger("123");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n* B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  multiply(E,A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n Check Multiply (positive)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("111111456");
+  B = stringToBigInteger("111111456");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n* B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  multiply(E,A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n Check Multiply (0)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("0");
+  B = stringToBigInteger("111111456");
+
+  printf("\n  A = 0");
+  // printBigInteger(stdout, A);
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  E = stringToBigInteger("12345");
+  makeZero(E);
+  multiply(E,A,B);
+  printf("\n  E = 0");
+  // printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n Check Prod (0)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("0");
+  B = stringToBigInteger("111111456");
+
+  printf("\n  A = 0");
+  // printBigInteger(stdout, A);  
+  printf("\n- B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  E = prod(A,B);
+  printf("\n  E = 0");
+  // printBigInteger(stdout, E);
+  printf("\n");
+
+
+  printf("\n=========================================================");
+  printf("\n Check Prod (+)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("7657567");
+  B = stringToBigInteger("111111456");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n* B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  E = prod(A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  printf("\n=========================================================");
+  printf("\n Check Prod Scalar (-1)" );
+  printf("\n=========================================================");
+
+  A = stringToBigInteger("-1");
+  B = stringToBigInteger("111111456");
+
+  printf("\n  A = ");
+  printBigInteger(stdout, A);  
+  printf("\n* B = ");
+  printBigInteger(stdout, B);
+  printf("\n ----------------------");
+
+  makeZero(E);
+  E = prod(A,B);
+  printf("\n  E = ");
+  printBigInteger(stdout, E);
+  printf("\n");
+
+  freeBigInteger(&A);
+  freeBigInteger(&B);
+  freeBigInteger(&C);
+  freeBigInteger(&D);
+  freeBigInteger(&E);
+  freeBigInteger(&F);
+  freeBigInteger(&S);
 
 }
 
