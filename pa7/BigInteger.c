@@ -654,15 +654,19 @@ void printBigInteger(FILE* out, BigInteger N) {
   }
 
   if (N->sign == 0) {
-    printf("\nempty"); return;
+    fprintf(out,"0"); return;
   }
 
   //print the zero
   if (N->sign == -1) {
     fprintf(out, "-");
   }
-  //print first element without 0 in front
+
+  //get rid of trailing 0's or elements that are 0
   Node temp = N->mag->front;
+  while (temp->data == 0) {
+    temp = temp->next;
+  }
   fprintf(out, "%ld",temp->data);
   temp = temp->next;
 
