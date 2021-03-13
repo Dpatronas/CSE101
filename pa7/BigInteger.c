@@ -195,9 +195,9 @@ BigInteger stringToBigInteger(char* s) {
     if ( str[i] == '\0' )
       continue;
 
-    //grab the element to append. Make elem positive if negative
-    int long elem = atol(str + i );  
-    // printf("\nelem: %ld\n", elem);
+    //grab the element to append. 
+    //Make elem positive if negative and 
+    int long elem = atol(str + i );
     if (elem < 0) 
       elem *= -1;
     
@@ -213,10 +213,15 @@ BigInteger stringToBigInteger(char* s) {
       last[j] = str[j];
 
     int long elem = atol(last);
-    // printf("\nlast elem: %ld\n", elem);
 
     if (elem < 0)
       elem *= -1;
+
+    //ignore trailing 0
+    if (elem == 0) {
+      B->mag = L;
+      return B;
+    }
 
     prepend(L,elem);
   }
@@ -447,8 +452,8 @@ BigInteger sum(BigInteger A, BigInteger B) {
   else {
     for (int i = 0; i < len; i++) {
 
-      first = get(A->mag);
-      second = get(B->mag);
+      first = get(B->mag);
+      second = get(A->mag);
 
       if (first == -1) 
         first = 0;
@@ -465,10 +470,10 @@ BigInteger sum(BigInteger A, BigInteger B) {
       //otherwise move each respective list once
       movePrev(A->mag); movePrev(B->mag);
     }
-    if (compare(A, B) > 0) {      //+A < -B = negative
+    if (compare(A, B) > 0) {      //A > -B = negative
       newBigInt->sign = -1;
     }
-    else if (compare(A, B) < 0) { //+A > -B = positive
+    else if (compare(A, B) < 0) { //A < -B = positive
       newBigInt->sign = 1;
     }
     //set the List
@@ -638,11 +643,16 @@ BigInteger diff(BigInteger A, BigInteger B) {
 // multiply() 
 // Places the product of A and B in the existing BigInteger P, overwriting  
 // its current state:  P = A*B 
-void multiply(BigInteger P, BigInteger A, BigInteger B);
+void multiply(BigInteger P, BigInteger A, BigInteger B) {
+  return;
+}
 
 // prod() 
 // Returns a reference to a new BigInteger object representing A*B 
-BigInteger prod(BigInteger A, BigInteger B);
+BigInteger prod(BigInteger A, BigInteger B) {
+  BigInteger N = newBigInteger();
+  return N;
+}
 
 // Other operations ----------------------------------------------------------- 
 // printBigInteger() 
