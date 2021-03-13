@@ -646,9 +646,6 @@ BigInteger diff(BigInteger A, BigInteger B) {
 //normalize a vector after multiplication occured
 int mult_norm(BigInteger N, int scal) {
 
-  // if (N->sign == 0) //if empty
-  //   return 0;
-
   moveBack(N->mag);
   long carry = 0;   //keep track of carries
   int ret = 1;     //default sign
@@ -693,7 +690,7 @@ BigInteger Scal(BigInteger A, int scal ) {
   if (scal == 0) { //0 * bigint = 0
     makeZero(A);
   }
-
+  
   else {
     List L = newList();       // new list to hold mult vector
     int len = A->mag->length; // number of times to multiply scalar by
@@ -739,34 +736,41 @@ BigInteger prod(BigInteger A, BigInteger B) {
   moveBack(B->mag);
   long scalar = 0;
   
+  int len = A->mag->length;
+
   //scalar multiplication const*B
   if (A->mag->length == 1) {
     scalar = get(A->mag);
-    Total = Scal(B, scalar);
+    Total->mag = Scal(B, scalar)->mag;
   }
   //scalar multiplication const*A
   else if (B->mag->length == 1) {
     scalar = get(B->mag);
-    Total = Scal(A,scalar);
+    Total->mag = Scal(A,scalar)->mag;
   }
 
   else {
-    for (int i = 0; i < A->mag->length; i++) {
+    for (int i = 0; i < len; i++) {
 
       scalar = get(B->mag);           //starts at the end of the list
       F = Scal(A,scalar);             //N = vector A x B
-      
+  
       for (int j = 0; j < i; j++) {
         append(F->mag,0);             //add the zeros to each scalar
       }
-      //get the next elements vector
-      movePrev(B->mag);
+      movePrev(B->mag);               //get the next elements vector
 
       //i is odd, adds two new vectors at a time
       if ( (i != 0) && (i % 1 == 0) ) {
         add(Total,S,F); //add up the normalized bigints S and F
       }
       S = F;                        //save the bigint we just made
+
+      if (get(B->mag) == 0) {
+        len--;
+        Total = F;
+        continue;
+      }
     }
   }
   if (A->sign != B->sign) {
