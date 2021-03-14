@@ -36,14 +36,19 @@ int main(int argc, char * argv[]) {
     exit(1);
   }
 
+  BigInteger A; 
+  BigInteger B;
+  BigInteger S; 
+  BigInteger P; 
+  BigInteger Z;
+
 //input the first Big Int
 //=================================================
 
   fscanf(in, "%d\n", &len);
   char str[len+1];
   fscanf(in, "%s\n", str );
-  BigInteger A = stringToBigInteger(str);
-
+  A = stringToBigInteger(str);
   printBigInteger(out, A); fprintf(out, "\n\n");
   
 //input the second Big Int
@@ -52,13 +57,12 @@ int main(int argc, char * argv[]) {
   fscanf(in, "%d\n", &len);
   char str2[len+1];
   fscanf(in, "%s\n", str2 );
-  BigInteger B = stringToBigInteger(str2);
+  B = stringToBigInteger(str2);
 
   printBigInteger(out, B); fprintf(out, "\n\n");
 
 // Arithmetic
 //=================================================
-  BigInteger S; BigInteger P; BigInteger Z;
 
   //A+B
   S = sum(A,B);  
@@ -75,8 +79,8 @@ int main(int argc, char * argv[]) {
   //scalars
   BigInteger Two   = stringToBigInteger("2");
   BigInteger Three = stringToBigInteger("3");
-  BigInteger Nine  = stringToBigInteger("9");
-  BigInteger SixT  = stringToBigInteger("16");
+  // BigInteger Nine  = stringToBigInteger("9");
+  // BigInteger SixT  = stringToBigInteger("16");
 
   P = prod(Three,A);  // 3A
   Z = prod(Two, B);   // 2B
@@ -115,6 +119,6 @@ int main(int argc, char * argv[]) {
 
   fclose(in);
   fclose(out);
-  
+
   return 0;
 }
